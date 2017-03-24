@@ -189,10 +189,10 @@ You can now see it in the Gitlab UI.
 ![Repo](images/first_commit.png)
 
 # Troubleshooting
-If a container doesn't start examine the logs.
+If a pod doesn't start examine the logs.
 ```bash
-cf ic ps
-cf ic logs -t <container ID>
+kubectl get pods
+kubectl logs <pod name>
 ```
 
 
