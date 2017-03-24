@@ -32,7 +32,7 @@ spec:
         name: gitlab
         env:
         - name: GITLAB_HOST
-          value: my.gitlab-server
+          value: gitlab
         - name: DB_HOST
           value: postgresql
         - name: REDIS_HOST

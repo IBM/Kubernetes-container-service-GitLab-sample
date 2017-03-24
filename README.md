@@ -1,10 +1,8 @@
-[![Build Status](https://travis-ci.org/IBM/container-service-gitlab-sample.svg?branch=master)](https://travis-ci.org/IBM/container-service-gitlab-sample)
-
-# GitLab deployment on Bluemix Container Service
+# GitLab deployment on Bluemix Kubernetes Container Service
 
 ## Overview
 This project shows how a common multi-component application can be deployed
-on the Bluemix container service. Each component runs in a separate container
+on the Bluemix container service with Kubernetes clusters. Each component runs in a separate container
 or group of containers. 
 
 Gitlab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
@@ -14,137 +12,111 @@ Gitlab represents a typical multi-tier app and each component will have their ow
 
 ## Included Components
 - Bluemix container service
+- Kubernetes
 - GitLab
 - NGINX
 - Redis
 - PostgreSQL
 
+## Prerequisite
+
+Create a Kubernetes cluster with IBM Bluemix Container Service. 
+
+If you have not setup the Kubernetes cluster, please follow the [Creating a Kubernetes cluster](https://github.com/IBM/container-journey-template) tutorial.
+
+## QuickStart
+
+For QuickStart, please go to [step 3](#3-create-services-and-deployments). We will use the images from DockerHub for QuickStart. If you want to build your private images, please follow the detailed [steps](#steps).
+
+
 ## Steps
 
-1. [Instal Bluemix and Container Service CLI Tools](#1-install-cli-tools)
-2. [Build PostgreSQL, Redis and Gitlab containers](#2-build-containers)
-3. [Deploy containers](#3-deploy-containers)
+1. [Install Docker CLI and Bluemix Container registry Plugin](#1-install-docker-cli-and-bluemix-container-registry-plugin)
+2. [Build PostgreSQL and Gitlab containers](#2-build-postgresql-and-gitlab-containers)
+3. [Create Services and Deployments](#3-create-services-and-deployments)
 4. [Using Gitlab](#4-using-gitlab)
 
-# 1. Install Bluemix and Container Service CLI tools
-Install CloudFoundry CLI for your OS from [GitHub] (https://github.com/cloudfoundry/cli/releases). Once the CloudFoundry CLI
-has been installed you can install the Bluemix Container Service Cloud Foundry plug-in.
+# 1. Install Docker CLI and Bluemix Container Registry Plugin
+
+> Note: If you do not want to build your private images for gitlab, please skip to [Create Services and Deployments](#3-create-services-and-deployments).
+
+First, install [Docker CLI](#https://www.docker.com/community-edition#/download).
+
+Then, install the Bluemix container registry plugin.
 
 ```bash
-cf install-plugin https://static-ice.ng.bluemix.net/ibm-containers-linux_x64
+bx plugin install container-registry -r bluemix
 ```
 
-Once the plugin is installed you can log into the Bluemix Container Service.
-First, you must log into Bluemix through the CloudFoundry CLI.
+Once the plugin is installed you can log into the Bluemix Container Registry.
 
 ```bash
-cf login -a https://api.ng.bluemix.net
+bx cr login
 ```
 
-If this is the first time using the container service you must initialize the plugin and
-set a namespace which identifies your private Bluemix images registry. It can be between 4 and 30 characters.
+If this is the first time using the Bluemix Container Registry you must set a namespace which identifies your private Bluemix images registry. It can be between 4 and 30 characters.
 
 ```bash
-cf ic init
-cf ic namespace set <namespace>
-```
-
-Then you must log into the Bluemix Container Service.
-
-```bash
-cf ic login
+bx cr namespace-add <namespace>
 ```
 
 Verify that it works.
 
 ```bash
-cf ic images
+bx cr images
 ```
 
-This should return a list of images from the default Bluemix registry.
 
-        REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE
-        registry.ng.bluemix.net/ibmnode                       v1.2                640ed14065df        5 weeks ago         188 MB
-        registry.ng.bluemix.net/ibmliberty                    microProfile        50854bcc98c3        2 months ago        237 MB
-        registry.ng.bluemix.net/ibm-backup-restore            latest              4b5d9037c97a        5 weeks ago         208 MB
-        registry.ng.bluemix.net/ibmliberty                    javaee7             96285b81d9df        2 months ago        314 MB
-        registry.ng.bluemix.net/ibmliberty                    latest              96285b81d9df        2 months ago        314 MB
-        registry.ng.bluemix.net/ibm-websphere-extreme-scale   latest              f98d12aad014        8 days ago          466 MB
-        registry.ng.bluemix.net/ibm-node-strong-pm            latest              3fc4ae24eb0e        4 weeks ago         259 MB
-        registry.ng.bluemix.net/ibmnode                       v1.1                fd4d70c5451b        5 weeks ago         181 MB
-        registry.ng.bluemix.net/ibm-integration-bus           latest              ec198557875c        5 weeks ago         683 MB
-        registry.ng.bluemix.net/ibmnode                       latest              acec21732cb5        5 weeks ago         192 MB
-        registry.ng.bluemix.net/ibmnode                       v4                  acec21732cb5        5 weeks ago         192 MB
-        registry.ng.bluemix.net/ibm-mq                        latest              9b6ae7557a34        8 days ago          771 MB
-        registry.ng.bluemix.net/ibm_wa_agent                  latest              3d38f3e80fd7        2 weeks ago         435 MB
-        registry.ng.bluemix.net/ibmliberty                    webProfile6         211f521035a2        2 months ago        268 MB
-        registry.ng.bluemix.net/ibmliberty                    webProfile7         6b2b8341fa32        2 months ago        276 MB
-
-
-# 2. Build PostgreSQL, Redis and Gitlab containers
+# 2. Build PostgreSQL and Gitlab containers
 
 Build the PostgreSQL container.
 
 ```bash
-cd containers/postgresql
-cf ic build -t registry.ng.bluemix.net/<namespace>/gitlab-postgres .
+cd containers/postgres
+docker build -f registry.ng.bluemix.net/<namespace>/gitlab-postgres .
+docker push registry.ng.bluemix.net/<namespace>/gitlab-postgres
 ```
 
 Build the Gitlab container.
 
 ```bash
 cd containers/gitlab
-cf ic build -t registry.ng.bluemix.net/<namespace>/gitlab .
+docker build -f registry.ng.bluemix.net/<namespace>/gitlab .
+docker push registry.ng.bluemix.net/<namespace>/gitlab
 ```
 
-The redis container from Docker Hub can be used without modification so it just needs to be imported.
+
+After finish building the images in bluemix registery, please modify the container images in your yaml files. 
+
+i.e. 
+1. In postgres.yaml, change `docker.io/tomcli/postgres:latest` to `registry.ng.bluemix.net/<namespace>/gitlab-postgres`
+2. In gitlab.yaml, change `docker.io/tomcli/gitlab:latest` to `registry.ng.bluemix.net/<namespace>/gitlab`
+
+> Note: Replace `<namespace>` to your own cloudfoundry namespace. You can check your namespace via `cf ic namespace get`
+
+# 3. Create Services and Deployments
+
+Run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
 
 ```bash
-cf ic cpi redis:alpine registry.ng.bluemix.net/<namespace>/redis
+kubectl create -f postgres.yaml
+kubectl create -f redis.yaml
+kubectl create -f gitlab.yaml
 ```
-
-# 3. Deploy containers
-
-Before the containers can run volumes must be created.
+After you created all the services and deployments, wait for 3 to 5 minutes and run the following commands to get your public IP and NodePort number.
 
 ```bash
-cf ic volume create postgresql
-cf ic volume create redis
-cf ic volume create gitlab
+$ kubectl get nodes
+NAME             STATUS    AGE
+169.47.241.106   Ready     23h
+$ kubectl get svc gitlab
+NAME      CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+gitlab    10.10.10.90   <nodes>       80:30911/TCP   16h
 ```
 
-Containers can now be deployed with the provided docker-compose file.
-In order to use docker-compose you MUST override the local Docker environment
-as described in "Option 2" when logging into the Bluemix container service.
+Congratulation. Now you can use the link **http://[IP]:[port number]** to access your gitlab site.
 
-If you do not already have docker-compose installed:
-
-```bash
-curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose ; chmod +x /usr/local/bin/docker-compose
-```
-
-```bash
-(in the toplevel repo directory)
-NAMESPACE=<namespace> docker-compose up -d
-```
-
-Or manually.
-
-```bash
-cf ic run -d --name pgsql --volume postgresql:/var/lib/postgresql registry.ng.bluemix.net/<namespace>/gitlab-postgresql
-cf ic run -d --name redis --volume redis:/var/lib/redis registry.ng.bluemix.net/<namespace>/redis
-cf ic run -d --volume gitlab:/home/git/data --link pgsql:postgresql --link redis:redis --publish 10022:22 --publish 10080:80 gitlab
-```
-
-Now a public IP can be bound to the Gitlab container.
-```bash
-cf ic ip request
-cf ic ip list
-cf ic ip bind <unbound IP from above> <gitlab container ID>
-```
-
-Verify everything is running by visiting <bound IP> in a browser which should result in a Gitlab screen prompting you to change the root password.
-![Password screen](images/gitlab_first_run.png)
+> Note: For the above example, the link would be http://169.47.241.106:30911  since its IP is 169.47.241.106 and its port number is 30911. 
 
 
 # 4. Using Gitlab
@@ -187,10 +159,17 @@ You can now see it in the Gitlab UI.
 ![Repo](images/first_commit.png)
 
 # Troubleshooting
-If a container doesn't start examine the logs.
+If a pod doesn't start examine the logs.
 ```bash
-cf ic ps
-cf ic logs -t <container ID>
+kubectl get pods
+kubectl logs <pod name>
+```
+
+
+To delete all your services and deployments, run
+
+```bash
+kubectl delete deployment,service -l app=gitlab
 ```
 
 # License
