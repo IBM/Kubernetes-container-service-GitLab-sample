@@ -40,7 +40,7 @@ For QuickStart, please go to [step 3](#3-create-services-and-deployments). We wi
 
 > Note: If you do not want to build your private images for gitlab, please skip to [Create Services and Deployments](#3-create-services-and-deployments).
 
-First, install [Docker CLI](#https://www.docker.com/community-edition#/download).
+First, install [Docker CLI](https://www.docker.com/community-edition#/download).
 
 Then, install the Bluemix container registry plugin.
 
