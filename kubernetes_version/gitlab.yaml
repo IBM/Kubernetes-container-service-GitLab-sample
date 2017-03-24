@@ -33,6 +33,10 @@ spec:
         env:
         - name: GITLAB_HOST
           value: my.gitlab-server
+        - name: DB_HOST
+          value: postgresql
+        - name: REDIS_HOST
+          value: redis
         ports:
         - containerPort: 80
           name: gitlab

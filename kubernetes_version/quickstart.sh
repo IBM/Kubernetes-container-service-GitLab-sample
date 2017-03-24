@@ -1,3 +1,4 @@
+#!/bin/bash
 kubectl create -f postgres.yaml
 sleep 15s
 kubectl create -f redis.yaml
