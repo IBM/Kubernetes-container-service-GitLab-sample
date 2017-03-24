@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: gitlab
+    tier: frontend
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: frontend
+    spec:
+      containers:
+      - image: docker.io/tomcli/gitlab:latest
+        name: gitlab
+        env:
+        - name: GITLAB_HOST
+          value: my.gitlab-server
+        ports:
+        - containerPort: 80
+          name: gitlab
+        volumeMounts:
+        - name: gitlab
+          mountPath: /home/git/data:rw
+      volumes:
+      - name: gitlab

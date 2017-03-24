@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  labels:
+    app: gitlab
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: gitlab
+    tier: postgreSQL
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgresql
+  labels:
+    app: gitlab
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: postgreSQL
+    spec:
+      containers:
+      - image: docker.io/tomcli/postgres:latest
+        name: postgresql
+        env:
+          - name: DB_USER
+            value : gitlab
+          - name: DB_PASS
+            value : password
+          - name: DB_NAME
+            value : gitlabhq_production
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        volumeMounts:
+        - name: postgresql
+          mountPath: /var/lib/postgresql:rw
+      volumes:
+      - name: postgresql

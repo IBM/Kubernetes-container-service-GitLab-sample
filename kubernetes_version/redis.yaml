@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: gitlab
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: gitlab
+    tier: backend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: gitlab
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: backend
+    spec:
+      containers:
+      - image: redis:alpine
+        name: redis
+        env:
+        - name: GITLAB_DB_HOST
+          value: postgres
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis
+          mountPath: /var/lib/redis:rw
+      volumes:
+      - name: redis
