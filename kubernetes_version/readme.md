@@ -43,34 +43,34 @@ For QuickStart, please go over [step 3](#3-create-services-and-deployments). We 
 Install the Bluemix Container Service Cloud Foundry plug-in.
 
 ```bash
-$ cf install-plugin https://static-ice.ng.bluemix.net/ibm-containers-linux_x64
+cf install-plugin https://static-ice.ng.bluemix.net/ibm-containers-linux_x64
 ```
 
 Once the plugin is installed you can log into the Bluemix Container Service.
 First, you must log into Bluemix through the CloudFoundry CLI.
 
 ```bash
-$ cf login -a https://api.ng.bluemix.net
+cf login -a https://api.ng.bluemix.net
 ```
 
 If this is the first time using the container service you must initialize the plugin and
 set a namespace which identifies your private Bluemix images registry. It can be between 4 and 30 characters.
 
 ```bash
-$ cf ic init
-$ cf ic namespace set <namespace>
+cf ic init
+cf ic namespace set <namespace>
 ```
 
 Then you must log into the Bluemix Container Service.
 
 ```bash
-$ cf ic login
+cf ic login
 ```
 
 Verify that it works.
 
 ```bash
-$ cf ic images
+cf ic images
 ```
 
 This should return a list of images from the default Bluemix registry.
@@ -129,15 +129,9 @@ i.e.
 Run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
 
 ```bash
-$ kubectl create -f postgres.yaml
-service "postgres" created
-deployment "postgres" created
-$ kubectl create -f redis.yaml
-service "redis" created
-deployment "redis" created
-$ kubectl create -f gitlab.yaml
-service "gitlab" created
-deployment "gitlab" created
+kubectl create -f postgres.yaml
+kubectl create -f redis.yaml
+kubectl create -f gitlab.yaml
 ```
 After you created all the services and deployments, wait for 3 to 5 minutes and run the following commands to get your public IP and NodePort number.
 
@@ -205,13 +199,7 @@ cf ic logs -t <container ID>
 To delete all your services and deployments, run
 
 ```bash
-$ kubectl delete deployment,service -l app=gitlab
-deployment "gitlab" deleted
-deployment "postgres" deleted
-deployment "redis" deleted
-service "gitlab" deleted
-service "postgres" deleted
-service "redis" deleted
+kubectl delete deployment,service -l app=gitlab
 ```
 
 # License
