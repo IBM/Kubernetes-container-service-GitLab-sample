@@ -92,7 +92,7 @@ i.e.
 1. In postgres.yaml, change `docker.io/tomcli/postgres:latest` to `registry.ng.bluemix.net/<namespace>/gitlab-postgres`
 2. In gitlab.yaml, change `docker.io/tomcli/gitlab:latest` to `registry.ng.bluemix.net/<namespace>/gitlab`
 
-> Note: Replace `<namespace>` to your own cloudfoundry namespace. You can check your namespace via `cf ic namespace get`
+> Note: Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
 
 # 3. Create Services and Deployments
 
