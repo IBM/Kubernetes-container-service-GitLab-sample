@@ -73,7 +73,7 @@ Build the PostgreSQL container.
 
 ```bash
 cd containers/postgres
-docker build -f registry.ng.bluemix.net/<namespace>/gitlab-postgres .
+docker build -t registry.ng.bluemix.net/<namespace>/gitlab-postgres .
 docker push registry.ng.bluemix.net/<namespace>/gitlab-postgres
 ```
 
@@ -81,7 +81,7 @@ Build the Gitlab container.
 
 ```bash
 cd containers/gitlab
-docker build -f registry.ng.bluemix.net/<namespace>/gitlab .
+docker build -t registry.ng.bluemix.net/<namespace>/gitlab .
 docker push registry.ng.bluemix.net/<namespace>/gitlab
 ```
 
