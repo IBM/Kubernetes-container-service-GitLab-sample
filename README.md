@@ -23,9 +23,6 @@ Create a Kubernetes cluster with IBM Bluemix Container Service.
 
 If you have not setup the Kubernetes cluster, please follow the [Creating a Kubernetes cluster](https://github.com/IBM/container-journey-template) tutorial.
 
-## QuickStart
-
-For QuickStart, please go to [step 3](#3-create-services-and-deployments). We will use the images from DockerHub for QuickStart. If you want to build your private images, please follow the detailed [steps](#steps).
 
 
 ## Steps
@@ -37,7 +34,6 @@ For QuickStart, please go to [step 3](#3-create-services-and-deployments). We wi
 
 # 1. Install Docker CLI and Bluemix Container Registry Plugin
 
-> Note: If you do not want to build your private images for gitlab, please skip to [Create Services and Deployments](#3-create-services-and-deployments).
 
 First, install [Docker CLI](https://www.docker.com/community-edition#/download).
 
@@ -98,6 +94,7 @@ i.e.
 Run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
 
 ```bash
+kubectl creare -f local-volumes.yaml
 kubectl create -f postgres.yaml
 kubectl create -f redis.yaml
 kubectl create -f gitlab.yaml
@@ -109,13 +106,15 @@ $ kubectl get nodes
 NAME             STATUS    AGE
 169.47.241.106   Ready     23h
 $ kubectl get svc gitlab
-NAME      CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-gitlab    10.10.10.90   <nodes>       80:30911/TCP   16h
+NAME      CLUSTER-IP     EXTERNAL-IP   PORT(S)                     AGE
+gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 ```
 
-Congratulation. Now you can use the link **http://[IP]:[port number]** to access your gitlab site.
+> Note: The 30080 port is for gitlab UI and the 30022 port is for ssh.
 
-> Note: For the above example, the link would be http://169.47.241.106:30911  since its IP is 169.47.241.106 and its port number is 30911. 
+Congratulation. Now you can use the link **http://[IP]:30080** to access your gitlab site on browser.
+
+> Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080. 
 
 
 # 4. Using Gitlab
@@ -133,7 +132,7 @@ Once a project has been created you'll be asked to add an SSH key for your user.
 To verify that your key is working correctly run:
 
 ```bash
-ssh -T git@<IP>
+ssh -T git@<IP> -p 30022
 ```
 
 Which should result in:
@@ -144,7 +143,7 @@ Welcome to GitLab, <user>!
 
 Now you can clone your project.
 ```bash
-git clone <project URL>
+git clone ssh://git@<IP>:30022/<user>/<project name>
 ```
 
 Add a file and commit:

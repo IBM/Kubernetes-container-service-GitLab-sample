@@ -6,12 +6,16 @@ metadata:
     app: gitlab
 spec:
   ports:
-    - port: 80
+    - name: gitlab-ui
+      port: 80
+      protocol: TCP
+      targetPort: 80
       nodePort: 30080
-      name: gitlab
-    - port: 22
+    - name: gitlab-ssh
+      port: 22
+      protocol: TCP
+      targetPort: 22
       nodePort: 30022
-      name: gitlab-ssh
   selector:
     app: gitlab
     tier: frontend
