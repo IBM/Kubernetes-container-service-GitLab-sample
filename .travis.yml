@@ -1,0 +1,4 @@
+language: bash
+group: stable
+dist: precise
+os: linux
