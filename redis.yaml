@@ -12,6 +12,19 @@ spec:
     app: gitlab
     tier: backend
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-claim
+  labels:
+    app: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -41,3 +54,5 @@ spec:
           mountPath: /var/lib/redis:rw
       volumes:
       - name: redis
+        persistentVolumeClaim:
+          claimName: redis-claim

@@ -7,10 +7,28 @@ metadata:
 spec:
   ports:
     - port: 80
+      nodePort: 30080
+      name: gitlab
+    - port: 22
+      nodePort: 30022
+      name: gitlab-ssh
   selector:
     app: gitlab
     tier: frontend
   type: NodePort
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-claim
+  labels:
+    app: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -48,3 +66,5 @@ spec:
           mountPath: /home/git/data:rw
       volumes:
       - name: gitlab
+        persistentVolumeClaim:
+          claimName: gitlab-claim

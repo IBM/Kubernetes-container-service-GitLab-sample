@@ -11,6 +11,19 @@ spec:
     app: gitlab
     tier: postgreSQL
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-claim
+  labels:
+    app: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -44,3 +57,5 @@ spec:
           mountPath: /var/lib/postgresql:rw
       volumes:
       - name: postgresql
+        persistentVolumeClaim:
+          claimName: postgres-claim
