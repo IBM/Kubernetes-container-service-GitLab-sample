@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/IBM/kubernetes-container-service-gitlab-sample.svg?branch=master)](https://travis-ci.org/IBM/kubernetes-container-service-gitlab-sample)
+
 # GitLab deployment on Bluemix Kubernetes Container Service
 
 ## Overview
@@ -164,10 +166,16 @@ kubectl logs <pod name>
 ```
 
 
-To delete all your services and deployments, run
+To delete all your services, deployments, and persistent volume claim, run
 
 ```bash
-kubectl delete deployment,service -l app=gitlab
+kubectl delete deployment,service,pvc -l app=gitlab
+```
+
+To delete your persistent volume, run
+
+```bash
+kubectl delete pv local-volume-1 local-volume-2 local-volume-3
 ```
 
 # License
