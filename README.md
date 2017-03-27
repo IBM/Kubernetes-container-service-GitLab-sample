@@ -5,7 +5,7 @@
 ## Overview
 This project shows how a common multi-component application can be deployed on the Bluemix Kubernetes Container service. Bluemix Container Service combines Docker and Kubernetes to deliver powerful container orchestration.
 
-Gitlab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
+GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
 
 The user interacts with GitLab via the web interface or by pushing code to a Git repo. The GitLab container runs the main Ruby on Rails application behind NGINX and gitlab-workhorse, which is a reverse proxy for large HTTP requests like file downloads and Git push/pull. When serving repositories over HTTP/HTTPS, GitLab utilizes the GitLab API to resolve authorization and access as well as serving Git objects.
 
@@ -64,7 +64,9 @@ bx cr images
 ```
 
 
-# 2. Build PostgreSQL and Gitlab containers
+# 2. Build PostgreSQL and GitLab containers
+
+PostgreSQL and GitLab containers need to be built. Redis container can be used as is from Docker Hub
 
 Build the PostgreSQL container.
 
