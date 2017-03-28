@@ -126,7 +126,7 @@ Congratulation. Now you can use the link **http://[IP]:30080** to access your gi
 > Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080. 
 
 
-# 4. Using Gitlab
+# 4. Using GitLab
 Now that Gitlab is running you can register as a new user and create a project.
 
 ![Registration page](images/register.png)
