@@ -76,7 +76,7 @@ docker build -t registry.ng.bluemix.net/<namespace>/gitlab-postgres .
 docker push registry.ng.bluemix.net/<namespace>/gitlab-postgres
 ```
 
-Build the Gitlab container.
+Build the GitLab container.
 
 ```bash
 cd containers/gitlab
@@ -104,7 +104,7 @@ kubectl create -f redis.yaml
 kubectl create -f gitlab.yaml
 ```
 
-After you created all the services and deployments, wait for 3 to 5 minutes. You can check the status of you deployment on Kubernetes UI. Run kubectl proxy and check when GitLab container becomes ready.
+After you created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run 'kubectl proxy' and check when the GitLab container becomes ready.
 
 ![Kubernetes Status Page](images/kube_ui.png)
 
