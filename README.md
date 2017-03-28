@@ -104,7 +104,7 @@ kubectl create -f redis.yaml
 kubectl create -f gitlab.yaml
 ```
 
-After you created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run 'kubectl proxy' and check when the GitLab container becomes ready.
+After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run 'kubectl proxy' and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
 
 ![Kubernetes Status Page](images/kube_ui.png)
 
