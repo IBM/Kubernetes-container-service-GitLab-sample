@@ -98,12 +98,17 @@ i.e.
 Run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
 
 ```bash
-kubectl creare -f local-volumes.yaml
+kubectl create -f local-volumes.yaml
 kubectl create -f postgres.yaml
 kubectl create -f redis.yaml
 kubectl create -f gitlab.yaml
 ```
-After you created all the services and deployments, wait for 3 to 5 minutes and run the following commands to get your public IP and NodePort number.
+
+After you created all the services and deployments, wait for 3 to 5 minutes. You can check the status of you deployment on Kubernetes UI. Run kubectl proxy and check when GitLab container becomes ready.
+
+![Kubernetes Status Page](images/kube_ui.png)
+
+After few minutes the following commands to get your public IP and NodePort number.
 
 ```bash
 $ kubectl get nodes
@@ -155,6 +160,7 @@ Add a file and commit:
 echo "Gitlab project" > README.md
 git add README.md
 git commit -a -m "Initial commit"
+git push origin master
 ```
 
 You can now see it in the Gitlab UI.
