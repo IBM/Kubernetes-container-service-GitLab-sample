@@ -165,6 +165,8 @@ git push origin master
 You can now see it in the Gitlab UI.
 ![Repo](images/first_commit.png)
 
+If you want to use http URLs for cloning and pushing to a public repository on GitLab, that`s enabled in the current deplyoment as well.
+
 # Troubleshooting
 If a pod doesn't start examine the logs.
 ```bash
