@@ -2,7 +2,6 @@
 
 # GitLab deployment on Bluemix Container Service using Kubernetes
 
-## Overview
 This project shows how a common multi-component application can be deployed on the Bluemix Kubernetes Container service. Bluemix Container Service combines Docker and Kubernetes to deliver powerful container orchestration.
 
 GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
