@@ -32,6 +32,7 @@ pkgconf"
 PACKAGE_LIST="
 ruby
 ruby-bigdecimal
+ruby-json
 postgresql-client
 nodejs
 openssh
