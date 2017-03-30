@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function bluemix_auth() {
+	echo "Authenticating with Bluemix"
 	bx login -u "$BX_USER" -p "$BX_PASS" -c 6aae3a1eef7c0d9f0d6ae1e69e949b2a > /dev/null
 	yes | bx plugin install container-registry -r bluemix
 	bx cr login
@@ -21,12 +22,14 @@ function build_images() {
 
 
 function kubectl_config() {
+	echo "Installing and configuring kubectl"
 	KUBECONFIG=$(bx cs cluster-config k8stest | awk  -F = '{print $2}' | tr -d '[:space:]')
 	export KUBECONFIG
 }
 
 
 function run_tests() {
+	echo "Running tests"
 	source ./quickstart.sh
 	sleep 20
 
@@ -51,6 +54,6 @@ function exit_tests() {
 
 
 bluemix_auth
-build_images
+#build_images
 kubectl_config
 run_tests
