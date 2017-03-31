@@ -2,7 +2,7 @@
 
 function bluemix_auth() {
 	echo "Authenticating with Bluemix"
-	bx login -a https://api.ng.bluemix.net-u "$BX_USER" -p "$BX_PASS" -c 6aae3a1eef7c0d9f0d6ae1e69e949b2a > /dev/null
+	bx login -a https://api.ng.bluemix.net -u "$BX_USER" -p "$BX_PASS" -c 6aae3a1eef7c0d9f0d6ae1e69e949b2a > /dev/null
 	yes | bx plugin install container-registry -r bluemix
 	bx cr login
 	bx cs init
