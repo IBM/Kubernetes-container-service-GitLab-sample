@@ -12,8 +12,7 @@ before_script:
 - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 - chmod +x kubectl
 - sudo mv kubectl /usr/local/bin
-script:
-- bash run_tests.sh
+script: true
 env:
   global:
   - secure: JWfW2aekuP73UUyVrUpvltnN5SPaIrDKYzcH7V54TzjDkZ/98a9nu15te5e1WRUb1W0gZtYnQexfLjdJjtweGMSFvfR0J44MYQt2a2qOExHPU6zYvrIpt91mHKvX3ymjCVVkhxfv85IXKTAsXy2DDFw7WvDBdauwdEIqDauU8EnnRzdSP21UVOA2aMn+RZp2aUziUXDOqZIIzDvzLs3V0VrAuHEyLsttPkijV9KrMFYkOGMpNYzQInfJOSo/6QkaiIwUntP++LQRTWWpFpX8K2N1rTmr4GVcF3jww2u+0E6Pl282n26KFOMU3RMbi+9gq3jqKPlbHT/uXRnmISwBhi70+s9WUxSrYH7cUFOEHohWtUUfsEwf5l9bk6pgQ8cazeKdS869EG67Y8PKMJ0NaQUGDzLm+0l1DL5CJboJYuT9OEVPcqsaP5/YegRmNkiaUmobIJUN65lbPFnLJJXq28EHfndHT/EHVFuhbb0a86459SWeGL23Sqc3zKfsQdkqcvwEVPQUyNF/pk4udii1g4UqOYsr57q1fKdYnT6EXUbubsqvk+vwkTeXEjycIdgE+3SRJ1+8C5RqGgMo/CZooddVzzT55hAcyy6JrOCNcdGh3zZm87J6uVUgSCOzVXLVfo8OVG+VJEIWydgDH9pNtGArSsmevg2JXbVpbev98LA=
