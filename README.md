@@ -196,4 +196,4 @@ kubectl delete pv local-volume-1 local-volume-2 local-volume-3
 ```
 
 # License
-[Apache 2.0](LICENSE.txt)
+[Apache 2.0](LICENSE)
