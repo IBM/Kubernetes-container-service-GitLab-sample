@@ -4,7 +4,7 @@
 
 This project shows how a common multi-component application can be deployed on the Bluemix Kubernetes Container service. Bluemix Container Service combines Docker and Kubernetes to deliver powerful container orchestration.
 
-GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
+GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database. This example is also deployable using Compose for PostgreSQL in Bluemix as the database.
 
 ![Flow](images/gitlab_container_2.png)
 
@@ -28,7 +28,7 @@ GitLab represents a typical multi-tier app and each component will have their ow
 
 ## Prerequisite
 
-Create a Kubernetes cluster with IBM Bluemix Container Service. 
+Create a Kubernetes cluster with IBM Bluemix Container Service.
 
 If you have not setup the Kubernetes cluster, please follow the [Creating a Kubernetes cluster](https://github.com/IBM/container-journey-template) tutorial.
 
@@ -40,6 +40,8 @@ If you have not setup the Kubernetes cluster, please follow the [Creating a Kube
 2. [Build PostgreSQL and Gitlab containers](#2-build-postgresql-and-gitlab-containers)
 3. [Create Services and Deployments](#3-create-services-and-deployments)
 4. [Using Gitlab](#4-using-gitlab)
+
+Alternatively, to deploy the Gitlab application using Compose for PostgreSQL on Bluemix as the database, please follow the [Compose for PostgreSQL on Bluemix steps ](README-bluemix-postgres.md)
 
 # 1. Install Docker CLI and Bluemix Container Registry Plugin
 
@@ -92,9 +94,9 @@ docker push registry.ng.bluemix.net/<namespace>/gitlab
 ```
 
 
-After finish building the images in bluemix registery, please modify the container images in your yaml files. 
+After finish building the images in bluemix registery, please modify the container images in your yaml files.
 
-i.e. 
+i.e.
 1. In postgres.yaml, change `docker.io/tomcli/postgres:latest` to `registry.ng.bluemix.net/<namespace>/gitlab-postgres`
 2. In gitlab.yaml, change `docker.io/tomcli/gitlab:latest` to `registry.ng.bluemix.net/<namespace>/gitlab`
 
@@ -130,7 +132,7 @@ gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 
 Congratulation. Now you can use the link **http://[IP]:30080** to access your gitlab site on browser.
 
-> Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080. 
+> Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080.
 
 
 # 4. Using GitLab
