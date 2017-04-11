@@ -43,7 +43,7 @@ bx cr images
 Use the Bluemix catalog or the bx command to create a service instance of Compose for PostgreSQL and add a set of credentials.
 
 ```bash
-bx service create compose-for-postgresql "Compose for PostgreSQL-GL"
+bx service create compose-for-postgresql Standard "Compose for PostgreSQL-GL"
 bx service key-create "Compose for PostgreSQL-GL" Credentials-1
 ```
 
