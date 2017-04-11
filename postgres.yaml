@@ -43,11 +43,9 @@ spec:
       - image: docker.io/tomcli/postgres:latest
         name: postgresql
         env:
-          - name: DB_USER
-            value : gitlab
-          - name: DB_PASS
-            value : password
-          - name: DB_NAME
+          - name: GITLAB_DB_USER
+            value : git
+          - name: GITLAB_DB_NAME
             value : gitlabhq_production
         ports:
         - containerPort: 5432
