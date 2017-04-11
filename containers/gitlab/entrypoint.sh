@@ -1,11 +1,23 @@
 #!/bin/sh
 set -x
 
+#test for DB credentials as a file and parse into user, pass, host and port
+if [ -f /opt/postgres-svc/binding ]
+then
+  DB_USER=$(grep uri\" /opt/postgres-svc/binding | cut -f 3 -d/ | cut -f 1 -d:)
+  DB_PASS=$(grep uri\" /opt/postgres-svc/binding | cut -f 3 -d/ | cut -f 2 -d: | cut -f 1 -d@)
+  DB_HOST=$(grep uri\" /opt/postgres-svc/binding | cut -f 3 -d/ | cut -f 2 -d: | cut -f 2 -d@)
+  DB_PORT=$(grep uri\" /opt/postgres-svc/binding | cut -f 3 -d/ | cut -f 3 -d:)
+fi
+
+#set defaults or use previously defined from environment
 DB_HOST=${DB_HOST:-postgresql}
 DB_PORT=${DB_PORT:-5432}
 REDIS_HOST=${REDIS_HOST:-redis}
 REDIS_PORT_NUM=${REDIS_PORT_NUM:-6379}
 GITLAB_HOST=${GITLAB_HOST:-gitlab-server}
+GITLAB_DB_USER=${DB_USER:-git}
+GITLAB_DB_NAME=${GITLAB_DB_NAME:-gitlabhq_production}
 
 create_database_config() {
 cat <<EOF > /home/git/gitlab/config/database.yml
@@ -15,10 +27,10 @@ cat <<EOF > /home/git/gitlab/config/database.yml
 production:
   adapter: postgresql
   encoding: unicode
-  database: gitlabhq_production
+  database: ${GITLAB_DB_NAME}
   pool: 10
-  username: git
-  password: "${DB_PASS}"
+  username: ${GITLAB_DB_USER}
+  password: ${DB_PASS}
   host: ${DB_HOST}
   port: ${DB_PORT}
 EOF
@@ -75,9 +87,20 @@ chmod 755 /home/git/data
 
 
 setup_database() {
+
+# if we are using postresql as a bound service, create database for github here
+if [ ${DB_USER} ]
+then
+  PGPASSWORD="${DB_PASS}" psql -v ON_ERROR_STOP=1 -h "${DB_HOST}" -p "${DB_PORT}" --username "${DB_USER}" -d template1 <<-EOSQL
+      CREATE EXTENSION IF NOT EXISTS pg_trgm;
+      CREATE DATABASE "$GITLAB_DB_NAME" OWNER "$DB_USER";
+      GRANT ALL PRIVILEGES ON DATABASE "$GITLAB_DB_NAME" TO "$DB_USER";
+EOSQL
+fi
+
 cd /home/git/gitlab
 
-RS=$(PG_PASSWORD=${DB_PASS} psql -h ${DB_HOST} -p ${DB_PORT} -U git -d gitlabhq_production -Atwc "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public';")
+RS=$(PGPASSWORD=${DB_PASS} psql -h ${DB_HOST} -p ${DB_PORT} -U ${GITLAB_DB_USER} -d ${GITLAB_DB_NAME} -Atwc "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public';")
 if [[ $RS -eq 0  ]]; then
 	sudo -u git -H force=yes bundle exec rake gitlab:setup RAILS_ENV=production
 fi
