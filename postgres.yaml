@@ -40,7 +40,7 @@ spec:
         tier: postgreSQL
     spec:
       containers:
-      - image: registry.ng.bluemix.net/<namespace>/postgres
+      - image: registry.ng.bluemix.net/<namespace>/gitlab-postgres
         name: postgresql
         env:
           - name: GITLAB_DB_USER
