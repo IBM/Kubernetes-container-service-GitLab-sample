@@ -20,10 +20,10 @@ GitLab represents a typical multi-tier app and each component will have their ow
 
 ## Included Components
 - Bluemix container service
-- Kubernetes
+- Kubernetes (1.5.3)
 - GitLab
 - NGINX
-- Redis
+- Redis (alpine)
 - PostgreSQL
 
 ## Prerequisite
@@ -97,10 +97,7 @@ docker push registry.ng.bluemix.net/<namespace>/gitlab
 After finish building the images in bluemix registery, please modify the container images in your yaml files.
 
 i.e.
-1. In postgres.yaml, change `docker.io/tomcli/postgres:latest` to `registry.ng.bluemix.net/<namespace>/gitlab-postgres`
-2. In gitlab.yaml, change `docker.io/tomcli/gitlab:latest` to `registry.ng.bluemix.net/<namespace>/gitlab`
-
-> Note: Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
+Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
 
 # 3. Create Services and Deployments
 

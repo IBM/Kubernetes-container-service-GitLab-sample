@@ -75,9 +75,7 @@ docker push registry.ng.bluemix.net/<namespace>/gitlab
 After finishing the image build in the bluemix registry, please modify the container image name in the yaml file.
 
 i.e.
-In gitlab-postgres-svc.yaml, change `docker.io/tomcli/gitlab:latest` to `registry.ng.bluemix.net/<namespace>/gitlab`
-
-> Note: Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
+Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
 
 # 4. Create Services and Deployments
 

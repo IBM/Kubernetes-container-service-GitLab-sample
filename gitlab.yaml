@@ -50,7 +50,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: docker.io/tomcli/gitlab:latest
+      - image: registry.ng.bluemix.net/<namespace>/gitlab
         name: gitlab
         env:
         - name: GITLAB_HOST

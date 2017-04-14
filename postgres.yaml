@@ -40,7 +40,7 @@ spec:
         tier: postgreSQL
     spec:
       containers:
-      - image: docker.io/tomcli/postgres:latest
+      - image: registry.ng.bluemix.net/<namespace>/postgres
         name: postgresql
         env:
           - name: GITLAB_DB_USER
