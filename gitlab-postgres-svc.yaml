@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  ports:
+    - name: gitlab-ui
+      port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: 30080
+    - name: gitlab-ssh
+      port: 22
+      protocol: TCP
+      targetPort: 22
+      nodePort: 30022
+  selector:
+    app: gitlab
+    tier: frontend
+  type: NodePort
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-claim
+  labels:
+    app: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: frontend
+    spec:
+      containers:
+      - image: docker.io/tomcli/gitlab:latest
+        name: gitlab
+        env:
+        - name: GITLAB_HOST
+          #your gitlab deployment name
+          value: gitlab
+        - name: REDIS_HOST
+          #your redis deployment name
+          value: redis
+        ports:
+        - containerPort: 80
+          name: gitlab
+        volumeMounts:
+        - name: gitlab
+          mountPath: /home/git/data:rw
+        - name: service-bind-volume
+          mountPath: /opt/postgres-svc
+      volumes:
+      - name: gitlab
+        persistentVolumeClaim:
+          claimName: gitlab-claim
+      - name: service-bind-volume
+        secret:
+          defaultMode: 420
+          secretName: binding-compose-for-postgresql-gl
