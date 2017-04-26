@@ -1,21 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: postgresql
   labels:
     app: gitlab
 spec:
   ports:
-    - port: 6379
-      targetPort: 6379
+    - port: 5432
   selector:
     app: gitlab
-    tier: backend
+    tier: postgreSQL
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redis-claim
+  name: postgres-claim
   labels:
     app: gitlab
 spec:
@@ -28,7 +27,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: redis
+  name: postgresql
   labels:
     app: gitlab
 spec:
@@ -38,21 +37,25 @@ spec:
     metadata:
       labels:
         app: gitlab
-        tier: backend
+        tier: postgreSQL
     spec:
       containers:
-      - image: redis:alpine
-        name: redis
+      - image: postgres:9.6.2-alpine
+        name: postgresql
         env:
-        - name: GITLAB_DB_HOST
-          value: postgres
+          - name: POSTGRES_USER
+            value : gitlab
+          - name: POSTGRES_DB
+            value : gitlabhq_production
+          - name: POSTGRES_PASSWORD
+            value: gitlab
         ports:
-        - containerPort: 6379
-          name: redis
+        - containerPort: 5432
+          name: postgresql
         volumeMounts:
-        - name: redis
-          mountPath: /var/lib/redis:rw
+        - name: postgresql
+          mountPath: /var/lib/postgresql:rw
       volumes:
-      - name: redis
+      - name: postgresql
         persistentVolumeClaim:
-          claimName: redis-claim
+          claimName: postgres-claim

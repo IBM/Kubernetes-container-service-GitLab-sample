@@ -1,3 +1,5 @@
+# PLACEHOLDER DOC
+
 # Steps using Compose for PostgreSQL on Bluemix as the database
 
 Note: The Compose for PostgreSQL service on Bluemix is available through a pricing plan. Please see [Compose for PostgreSQL Catalog item](https://console.ng.bluemix.net/catalog/services/compose-for-postgresql/) for more details on pricing.
@@ -5,9 +7,8 @@ Note: The Compose for PostgreSQL service on Bluemix is available through a prici
 
 1. [Install Docker CLI and Bluemix Container registry Plugin](#1-install-docker-cli-and-bluemix-container-registry-plugin)
 2. [Create Compose for PostgreSQL on Bluemix](#2-create-compose-for-postgresql-on-bluemix)
-3. [Build Gitlab container](#3-build-gitlab-container)
-4. [Create Services and Deployments](#4-create-services-and-deployments)
-5. [Using Gitlab](#5-using-gitlab)
+3. [Create Services and Deployments](#3-create-services-and-deployments)
+4. [Using Gitlab](#4-using-gitlab)
 
 # 1. Install Docker CLI and Bluemix Container Registry Plugin
 
@@ -60,26 +61,9 @@ Verify that the credentials have been added.
 kubectl get secrets
 ```
 
-# 3. Build GitLab container
+# 3. Create Services and Deployments
 
-A GitLab container needs to be built. The Redis container can be used as is from Docker Hub
-
-Build the GitLab container.
-
-```bash
-cd containers/gitlab
-docker build -t registry.ng.bluemix.net/<namespace>/gitlab .
-docker push registry.ng.bluemix.net/<namespace>/gitlab
-```
-
-After finishing the image build in the bluemix registry, please modify the container image name in the yaml file.
-
-i.e.
-Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
-
-# 4. Create Services and Deployments
-
-Run the following commands or run the quickstart script `bash quickstart-postgres-svc.sh` with your Kubernetes cluster.
+Run the following commands:
 
 ```bash
 kubectl create -f local-volumes.yaml
@@ -109,47 +93,9 @@ Congratulation. Now you can use the link **http://[IP]:30080** to access your gi
 > Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080.
 
 
-# 5. Using GitLab
-Now that Gitlab is running you can register as a new user and create a project.
+# 4. Using GitLab
 
-![Registration page](images/register.png)
-
-
-After logging in as your newly-created user you can create a new project.
-
-![Create project](images/new_project.png)
-
-Once a project has been created you'll be asked to add an SSH key for your user.
-
-To verify that your key is working correctly run:
-
-```bash
-ssh -T git@<IP> -p 30022
-```
-
-Which should result in:
-
-```bash
-Welcome to GitLab, <user>!
-```
-
-Now you can clone your project.
-```bash
-git clone ssh://git@<IP>:30022/<user>/<project name>
-```
-
-Add a file and commit:
-```bash
-echo "Gitlab project" > README.md
-git add README.md
-git commit -a -m "Initial commit"
-git push origin master
-```
-
-You can now see it in the Gitlab UI.
-![Repo](images/first_commit.png)
-
-If you want to use http URLs for cloning and pushing to a public repository on GitLab, that`s enabled as well.
+Refer back to [Using Gitlab](README.md#4-using-gitlab)
 
 # Troubleshooting
 If a pod doesn't start examine the logs.
