@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/IBM/kubernetes-container-service-gitlab-sample.svg?branch=master)](https://travis-ci.org/IBM/kubernetes-container-service-gitlab-sample)
 
-# GitLab deployment on Bluemix Container Service using Kubernetes
+# GitLab deployment on Kubernetes Cluster
 
 This project shows how a common multi-component application can be deployed on the Bluemix Kubernetes Container service. Bluemix Container Service combines Docker and Kubernetes to deliver powerful container orchestration.
 
