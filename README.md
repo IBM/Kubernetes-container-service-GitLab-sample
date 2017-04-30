@@ -2,9 +2,9 @@
 
 # GitLab deployment on Kubernetes Cluster
 
-This project shows how a common multi-component application can be deployed on the Bluemix Kubernetes Container service. Bluemix Container Service combines Docker and Kubernetes to deliver powerful container orchestration.
+This project shows how a common multi-component workload, in this case GitLab can be deployed on Kubernetes Cluster.  GitLab is famous for its Git-based and code-tracking tool that programmers can easily install. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database. 
 
-GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database. This example is also deployable using Compose for PostgreSQL in Bluemix as the database.
+By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, and more), you can deploy it to Kubernetes. This example is also deployable using Compose for PostgreSQL in Bluemix as the database.
 
 ![Flow](images/gitlab_container_2.png)
 
@@ -19,36 +19,40 @@ GitLab represents a typical multi-tier app and each component will have their ow
 5. The user accesses the repository by going through the Git shell.
 
 ## Included Components
-- Bluemix container service
 - Kubernetes (1.5.3)
+- Bluemix container service
 - GitLab
 - NGINX
 - Redis (alpine)
 - PostgreSQL
 
+## Objectives
+
+This scenario provides instructions for the following tasks:
+
+- Build GitLab and/or PostgreSQL containers, and store them in container registry
+- Create local persistent volumes to define persistent disks for GitLab and PostgreSQL
+- Create and deploy the GitLab and Redis container
+- Create and deploy the PostgreSQL database(either in a container or using Bluemix PostgreSQL as backend).
+
 ## Prerequisite
 
-Create a Kubernetes cluster with IBM Bluemix Container Service.
-
-If you have not setup the Kubernetes cluster, please follow the [Creating a Kubernetes cluster](https://github.com/IBM/container-journey-template) tutorial.
-
-
+Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Steps
 
-1. [Install Docker CLI and Bluemix Container registry Plugin](#1-install-docker-cli-and-bluemix-container-registry-plugin)
-2. [Build PostgreSQL and Gitlab containers](#2-build-postgresql-and-gitlab-containers)
+1. [Install Docker CLI](#1-install-docker-cli)
+2. [Build and push GitLab Container Images](#2-build-and-push-gitlab-container-images)
 3. [Create Services and Deployments](#3-create-services-and-deployments)
 4. [Using Gitlab](#4-using-gitlab)
 
 Alternatively, to deploy the Gitlab application using Compose for PostgreSQL on Bluemix as the database, please follow the [Compose for PostgreSQL on Bluemix steps ](README-bluemix-postgres.md)
 
-# 1. Install Docker CLI and Bluemix Container Registry Plugin
-
+# 1. Install Docker CLI
 
 First, install [Docker CLI](https://www.docker.com/community-edition#/download).
 
-Then, install the Bluemix container registry plugin.
+You can use Docker hub for storing your images. Optionally, to use Bluemix Container Registry, install this plugin.
 
 ```bash
 bx plugin install container-registry -r bluemix
@@ -72,12 +76,18 @@ Verify that it works.
 bx cr images
 ```
 
+# 2. Build and push GitLab Container Images
 
-# 2. Build PostgreSQL and GitLab containers
+GitLab and PostgreSQL container images need to be built. Redis container can be used as is from Docker Hub. If you are using Compose for PostgreSQL as backend, you only need to build GitLab image.
 
-PostgreSQL and GitLab containers need to be built. Redis container can be used as is from Docker Hub
+Build and push the GitLab container.
 
-Build the PostgreSQL container.
+```bash
+cd containers/gitlab
+docker build -t registry.ng.bluemix.net/<namespace>/gitlab .
+docker push registry.ng.bluemix.net/<namespace>/gitlab
+```
+Build and push the PostgreSQL container.
 
 ```bash
 cd containers/postgres
@@ -85,19 +95,10 @@ docker build -t registry.ng.bluemix.net/<namespace>/gitlab-postgres .
 docker push registry.ng.bluemix.net/<namespace>/gitlab-postgres
 ```
 
-Build the GitLab container.
-
-```bash
-cd containers/gitlab
-docker build -t registry.ng.bluemix.net/<namespace>/gitlab .
-docker push registry.ng.bluemix.net/<namespace>/gitlab
-```
-
-
-After finish building the images in bluemix registery, please modify the container images in your yaml files.
+After you finish building and pushing the images in registery, please modify the container images in your yaml files.
 
 i.e.
-Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces`
+Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces` for 
 
 # 3. Create Services and Deployments
 
