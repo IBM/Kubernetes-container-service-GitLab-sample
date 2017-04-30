@@ -2,7 +2,7 @@
 
 # GitLab deployment on Kubernetes Cluster
 
-This project shows how a common multi-component workload, in this case GitLab can be deployed on Kubernetes Cluster.  GitLab is famous for its Git-based and code-tracking tool that programmers can easily install. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database. 
+This project shows how a common multi-component workload, in this case GitLab, can be deployed on Kubernetes Cluster. GitLab is famous for its Git-based and code-tracking tool. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database. 
 
 By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, and more), you can deploy it to Kubernetes. This example is also deployable using Compose for PostgreSQL in Bluemix as the database.
 
