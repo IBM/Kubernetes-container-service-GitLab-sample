@@ -85,7 +85,7 @@ bx cr images
 
 GitLab and PostgreSQL images need to be built. Redis can be used as is from Docker Hub. If you are using Compose for PostgreSQL as backend, you only need to build GitLab image.
 
-We are using The images [can be pushed in Docker](https://docs.docker.com/datacenter/dtr/2.2/guides/user/manage-images/pull-and-push-images) hub as well.
+We are using Bluemix container registry to push images, but the images [can be pushed in Docker hub](https://docs.docker.com/datacenter/dtr/2.2/guides/user/manage-images/pull-and-push-images) as well.
 
 Build and push the GitLab container.
 
