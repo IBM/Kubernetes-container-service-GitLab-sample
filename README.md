@@ -42,11 +42,12 @@ Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/ge
 ## Steps
 
 1. [Install Docker CLI](#1-install-docker-cli)
-2. [Build and push GitLab container images](#2-build-and-push-gitlab-container-images)
-3. [Create Services and Deployments](#3-create-services-and-deployments)
+2. [Build and push GitLab component images to registry](#2-build-and-push-gitlab-component-images-to-registry)
+3. [Create Services and Deployments for GitLab, Redis, and PostgreSQL](#3-create-services-and-deployments-for-gitlab-redis-and-postgresql)
   - 3.1 [Using PostgreSQL in container](#31-using-postgresql-in-container)
   - 3.2 [Using PostgreSQL from Bluemix](#32-using-postgresql-from-bluemix)
-4. [Using Gitlab](#4-using-gitlab)
+4. [Retrieve external ip and port for GitLab](#4-retrieve-external-ip-and-port-for-GitLab)
+5. [Use Gitlab to host your repositories](#5-use-gitlab-to-host-your-repositories)
 
 Alternatively, to deploy the Gitlab application using Compose for PostgreSQL on Bluemix as the database, please follow the [Compose for PostgreSQL on Bluemix steps ](README-bluemix-postgres.md)
 
@@ -54,7 +55,9 @@ Alternatively, to deploy the Gitlab application using Compose for PostgreSQL on 
 
 First, install [Docker CLI](https://www.docker.com/community-edition#/download).
 
-You can use Docker hub for storing your images. Optionally, to use Bluemix Container Registry, install this plugin.
+You can use Docker hub for puhsing your images. 
+
+Optionally, to use Bluemix Container Registry, install this plugin.
 
 ```bash
 bx plugin install container-registry -r bluemix
@@ -78,9 +81,11 @@ Verify that it works.
 bx cr images
 ```
 
-# 2. Build and push GitLab container images
+# 2. Build and push GitLab component images to registry
 
 GitLab and PostgreSQL images need to be built. Redis can be used as is from Docker Hub. If you are using Compose for PostgreSQL as backend, you only need to build GitLab image.
+
+We are using The images [can be pushed in Docker](https://docs.docker.com/datacenter/dtr/2.2/guides/user/manage-images/pull-and-push-images) hub as well.
 
 Build and push the GitLab container.
 
@@ -97,7 +102,7 @@ docker build -t registry.ng.bluemix.net/<namespace>/gitlab-postgres .
 docker push registry.ng.bluemix.net/<namespace>/gitlab-postgres
 ```
 
-After you finish building and pushing the images in registery, please modify the container images in your yaml files.
+After you finish building and pushing the images in registry, please modify the container images in your yaml files.
 
 i.e.
 Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces` for 
@@ -119,22 +124,7 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 
 ![Kubernetes Status Page](images/kube_ui.png)
 
-After few minutes the following commands to get your public IP and NodePort number.
-
-```bash
-$ kubectl get nodes
-NAME             STATUS    AGE
-169.47.241.106   Ready     23h
-$ kubectl get svc gitlab
-NAME      CLUSTER-IP     EXTERNAL-IP   PORT(S)                     AGE
-gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
-```
-
-> Note: The 30080 port is for gitlab UI and the 30022 port is for ssh.
-
-Congratulation. Now you can use the link **http://[IP]:30080** to access your gitlab site on browser.
-
-> Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080.
+Next [retrieve your external ip and port for GitLab](retrieve-external-ip-and-port-for-GitLab)
 
 ### 3.2 Using PostgreSQL from Bluemix
 
@@ -169,6 +159,8 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 
 ![Kubernetes Status Page](images/kube_ui_gr.png)
 
+# 4. Retrieve external ip and port for GitLab
+
 After few minutes run the following commands to get your public IP and NodePort number.
 
 ```bash
@@ -187,7 +179,7 @@ Congratulation. Now you can use the link **http://[IP]:30080** to access your gi
 > Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080.
 
 
-# 4. Using GitLab
+# 5. Use Gitlab to host your repositories
 Now that Gitlab is running you can register as a new user and create a project.
 
 ![Registration page](images/register.png)
@@ -247,6 +239,13 @@ To delete your persistent volume, run
 
 ```bash
 kubectl delete pv local-volume-1 local-volume-2 local-volume-3
+```
+To delete your PostgreSQL secret in kubernetes and remove the service instance from Bluemix, run
+
+```bash
+kubectl delete secret binding-compose-for-postgresql-gl
+bx service key-delete "Compose for PostgreSQL-GL" Credentials-1
+bx service delete "Compose for PostgreSQL-GL"
 ```
 
 # License
