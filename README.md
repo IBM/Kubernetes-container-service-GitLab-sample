@@ -107,7 +107,7 @@ Replace `<namespace>` to your own container registry namespace. You can check yo
 
 # 3. Create Services and Deployments for GitLab, Redis, and PostgreSQL
 
-### 3.1 Using PostgreSQL in container
+### 3.1 Use PostgreSQL in container
 
 If you are using a container image to run PostgreSQL, run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
 
@@ -124,7 +124,7 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 
 Next [retrieve your external ip and port for GitLab](retrieve-external-ip-and-port-for-GitLab)
 
-### 3.2 Using PostgreSQL from Bluemix
+### 3.2 Use PostgreSQL from Bluemix
 
 Use the Bluemix catalog or the bx command to create a service instance of Compose for PostgreSQL and add a set of credentials.
 
