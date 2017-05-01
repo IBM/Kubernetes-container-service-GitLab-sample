@@ -44,8 +44,8 @@ Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/ge
 1. [Install Docker CLI](#1-install-docker-cli)
 2. [Build and push GitLab component images to registry](#2-build-and-push-gitlab-component-images-to-registry)
 3. [Create Services and Deployments for GitLab, Redis, and PostgreSQL](#3-create-services-and-deployments-for-gitlab-redis-and-postgresql)
-  - 3.1 [Use PostgreSQL in container](#31-using-postgresql-in-container)
-  - 3.2 [Use PostgreSQL from Bluemix](#32-using-postgresql-from-bluemix)
+  - 3.1 [Use PostgreSQL in container](#31-use-postgresql-in-container)
+  - 3.2 [Use PostgreSQL from Bluemix](#32-use-postgresql-from-bluemix)
 4. [Retrieve external ip and port for GitLab](#4-retrieve-external-ip-and-port-for-gitlab)
 5. [GitLab is ready! Use GitLab to host your repositories](#5-gitlab-is-ready-use-gitlab-to-host-your-repositories)
 
