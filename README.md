@@ -19,21 +19,23 @@ By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, a
 5. The user accesses the repository by going through the Git shell.
 
 ## Included Components
-- Kubernetes (1.5.3)
-- Bluemix container service
-- GitLab
-- NGINX
-- Redis (alpine)
-- PostgreSQL
+## Included Components
+- [GitLab](https://about.gitlab.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
+- [Kubernetes Clusters](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov)
+- [Bluemix container service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
+- [Bluemix Compose for PostgreSQL](https://console.ng.bluemix.net/catalog/services/compose-for-postgresql)
 
 ## Objectives
 
 This scenario provides instructions for the following tasks:
 
-- Build GitLab and/or PostgreSQL containers, and store them in container registry
-- Create local persistent volumes to define persistent disks for GitLab and PostgreSQL
-- Create and deploy the GitLab and Redis containers
-- Create and deploy the PostgreSQL database(either in a container or using Bluemix PostgreSQL as backend).
+- How to build containers, and store them in container registry
+- How to use Kubernetes to create local persistent volumes to define persistent disks
+- How to depply containers using Kubernetes pods and services
+- How to use Bluemix service in Kubernetes applications
+- How to deploy a distributed GitLab on Kubernetes
 
 ## Prerequisite
 
