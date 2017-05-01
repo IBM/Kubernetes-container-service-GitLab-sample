@@ -26,6 +26,15 @@ By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, a
 - [Bluemix container service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
 - [Bluemix Compose for PostgreSQL](https://console.ng.bluemix.net/catalog/services/compose-for-postgresql)
 
+## Objectives
+This scenario provides instructions and learning for the following tasks:
+
+- Build containers, and store them in container registry
+- Use Kubernetes to create local persistent volumes to define persistent disks
+- Deploy containers using Kubernetes pods and services
+- Use Bluemix service in Kubernetes applications
+- Deploy a distributed GitLab on Kubernetes
+
 ## Prerequisite
 
 Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
