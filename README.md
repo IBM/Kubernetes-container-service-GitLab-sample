@@ -43,8 +43,8 @@ Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/ge
 ## Steps
 
 1. [Install Docker CLI](#1-install-docker-cli)
-2. [Build and push GitLab component images to registry](#2-build-and-push-gitlab-component-images-to-registry)
-3. [Create Services and Deployments for GitLab, Redis, and PostgreSQL](#3-create-services-and-deployments-for-gitlab-redis-and-postgresql)
+2. [Build and push GitLab component images to container registry](#2-build-and-push-gitlab-component-images-to-container-registry)
+3. [Use Kubernetes to create Services and Deployments for GitLab, Redis, and PostgreSQL](#3-use-kubernetes-to-create-services-and-deployments-for-gitlab-redis-and-postgresql)
   - 3.1 [Use PostgreSQL in container](#31-use-postgresql-in-container)
   - 3.2 [Use PostgreSQL from Bluemix](#32-use-postgresql-from-bluemix)
 4. [Retrieve external ip and port for GitLab](#4-retrieve-external-ip-and-port-for-gitlab)
@@ -80,7 +80,7 @@ Verify that it works.
 bx cr images
 ```
 
-# 2. Build and push GitLab component images to registry
+# 2. Build and push GitLab component images to container registry
 
 GitLab and PostgreSQL images need to be built. Redis can be used as is from Docker Hub. If you are using Compose for PostgreSQL as backend, you only need to build GitLab image.
 
@@ -106,7 +106,7 @@ After you finish building and pushing the images in registry, please modify the 
 i.e.
 Replace `<namespace>` to your own container registry namespace. You can check your namespace via `bx cr namespaces` for 
 
-# 3. Create Services and Deployments for GitLab, Redis, and PostgreSQL
+# 3. Use Kubernetes to create Services and Deployments for GitLab, Redis, and PostgreSQL
 
 ### 3.1 Use PostgreSQL in container
 
