@@ -8,18 +8,6 @@ function bluemix_auth() {
 	bx cs init
 }
 
-function build_images() {
-	cd containers/gitlab
-	docker build -t registry.ng.bluemix.net/$BX_NAMESPACE/gitlab .
-	docker push registry.ng.bluemix.net/$BX_NAMESPACE/gitlab
-
-	cd ../postgres
-	docker build -t registry.ng.bluemix.net/$BX_NAMESPACE/gitlab-postgres .
-	docker push registry.ng.bluemix.net/$BX_NAMESPACE/gitlab-postgres
-
-	cd ../../
-}
-
 
 function kubectl_config() {
 	echo "Installing and configuring kubectl"
@@ -54,6 +42,5 @@ function exit_tests() {
 
 
 bluemix_auth
-#build_images
 kubectl_config
 run_tests

@@ -1,9 +1,9 @@
 #!/bin/bash
-kubectl create -f local-volumes.yaml
-kubectl create -f postgres.yaml
+kubectl create -f kubernetes/local-volumes.yaml
+kubectl create -f kubernetes/postgres.yaml
 sleep 5s
-kubectl create -f redis.yaml
+kubectl create -f kubernetes/redis.yaml
 sleep 5s
-kubectl create -f gitlab.yaml
+kubectl create -f kubernetes/gitlab.yaml
 kubectl get nodes
 kubectl get svc gitlab
