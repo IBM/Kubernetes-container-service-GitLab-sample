@@ -37,7 +37,7 @@ This scenario provides instructions and learning for the following tasks:
 
 ## Prerequisite
 
-Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_tutorials.html#cs_cluster_tutorial) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
+Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template#container-journey-template---creating-a-kubernetes-cluster) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry) to the Bluemix Container Registry.
 
@@ -59,7 +59,7 @@ NAME             STATUS    AGE       VERSION
 x.x.x.x   Ready     17h       v1.5.3-2+be7137fd3ad68f
 ```
 
-> Note: If this step fails see troubleshooting docs at [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) or [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_tutorials.html#cs_cluster_tutorial).
+> Note: If this step fails see troubleshooting docs at [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) or [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_troubleshoot.html#cs_troubleshoot).
 
 ### 1.1 Use PostgreSQL in container
 
