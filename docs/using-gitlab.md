@@ -21,6 +21,8 @@ Which should result in:
 Welcome to GitLab, <user>!
 ```
 
+> Note: Remember you need to have modified your hosts file to use the URL provided, otherwise you'll need to use the node's IP address as described [here](../README.md#2-retrieve-external-ip-and-port-for-gitLab).
+
 Now you can clone your project.
 ```bash
 git clone ssh://git@gitlab.example.com:30022/<user>/<project name>
