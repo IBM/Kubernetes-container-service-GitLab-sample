@@ -118,7 +118,7 @@ After few minutes run the following commands to get your public IP and NodePort 
 ```bash
 $ kubectl get nodes
 NAME             STATUS    AGE
-169.47.241.106   Ready     23h
+169.47.241.22   Ready     23h
 $ kubectl get svc gitlab
 NAME      CLUSTER-IP     EXTERNAL-IP   PORT(S)                     AGE
 gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
@@ -126,9 +126,9 @@ gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 
 > Note: The 30080 port is for gitlab UI and the 30022 port is for ssh.
 
-> Note: The gitlab external url is set to `gitlab.example.com` add this to your hosts file pointing to your IP address from above in order to use the url that gitlab expects. If you can't do this, then using the IP should work.
+> Note: The gitlab external url is set to `gitlab.example.com` add this to your hosts file pointing to your IP address from above in order to use the url that gitlab expects. If you can't do this, then using the IP (in this example 169.47.241.22) should work.
 
-Congratulation. Now you can use the link [http://gitlab.example.com:30080](http://gitlab.example.com:30080) to access your gitlab service from your web browser.
+Congratulations. Now you can use the link [http://gitlab.example.com:30080](http://gitlab.example.com:30080) or http://<node_ip>:30080 to access your gitlab service from your web browser.
 
 ## 3. GitLab is ready! Use GitLab to host your repositories
 
