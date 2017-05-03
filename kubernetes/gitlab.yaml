@@ -9,7 +9,7 @@ spec:
     - name: gitlab-ui
       port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 30080
       nodePort: 30080
     - name: gitlab-ssh
       port: 22
@@ -50,20 +50,26 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: registry.ng.bluemix.net/<namespace>/gitlab
+      - image: gitlab/gitlab-ce:9.1.0-ce.0
         name: gitlab
         env:
-        - name: GITLAB_HOST
-          #your gitlab deployment name
-          value: gitlab
-        - name: DB_HOST
-          #your postgreSQL deployment name
-          value: postgresql
-        - name: REDIS_HOST
-          #your redis deployment name
-          value: redis
+        - name: GITLAB_OMNIBUS_CONFIG
+          value: |
+            postgresql['enable'] = false
+            gitlab_rails['db_username'] = "gitlab"
+            gitlab_rails['db_password'] = "gitlab"
+            gitlab_rails['db_host'] = "postgresql"
+            gitlab_rails['db_port'] = "5432"
+            gitlab_rails['db_database'] = "gitlabhq_production"
+            gitlab_rails['db_adapter'] = 'postgresql'
+            gitlab_rails['db_encoding'] = 'utf8'
+            redis['enable'] = false
+            gitlab_rails['redis_host'] = 'redis'
+            gitlab_rails['redis_port'] = '6379'
+            gitlab_rails['gitlab_shell_ssh_port'] = 30022
+            external_url 'http://gitlab.example.com:30080'
         ports:
-        - containerPort: 80
+        - containerPort: 30080
           name: gitlab
         volumeMounts:
         - name: gitlab
