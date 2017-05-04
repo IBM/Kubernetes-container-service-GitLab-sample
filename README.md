@@ -35,13 +35,19 @@ This scenario provides instructions and learning for the following tasks:
 - Use Bluemix service in Kubernetes applications
 - Deploy a distributed GitLab on Kubernetes
 
-## Prerequisite
+## Deployment Scenarios
+
+### Deploy using Docker
+
+see [Deploying Gitlab with Docker](docs/deploy-with-docker.md)
+
+### Deploy to Kubernetes
 
 Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template#container-journey-template---creating-a-kubernetes-cluster) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry) to the Bluemix Container Registry.
 
-## Steps
+#### Steps
 
 1. [Use Kubernetes to create Services and Deployments](#1-use-kubernetes-to-create-services-and-deployments-for-gitlab-redis-and-postgresql)
   - 1.1 [Use PostgreSQL in container](#11-use-postgresql-in-container) or
@@ -49,7 +55,7 @@ If you want to use the Bluemix Container Registry start by [Uploading the images
 2. [Retrieve external ip and port for GitLab](#2-retrieve-external-ip-and-port-for-gitlab)
 3. [GitLab is ready! Use GitLab to host your repositories](#3-gitlab-is-ready-use-gitlab-to-host-your-repositories)
 
-## 1. Use Kubernetes to create Services and Deployments for GitLab, Redis, and PostgreSQL
+#### 1. Use Kubernetes to create Services and Deployments for GitLab, Redis, and PostgreSQL
 
 Ensure your kubernetes cluster is reachable by running the `kubectl` command.  
 
@@ -61,7 +67,7 @@ x.x.x.x   Ready     17h       v1.5.3-2+be7137fd3ad68f
 
 > Note: If this step fails see troubleshooting docs at [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) or [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_troubleshoot.html#cs_troubleshoot).
 
-### 1.1 Use PostgreSQL in container
+##### 1.1 Use PostgreSQL in container
 
 If you are using a container image to run PostgreSQL, run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
 
@@ -78,7 +84,7 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 
 Next [retrieve your external ip and port for GitLab](2-retrieve-external-ip-and-port-for-GitLab)
 
-### 1.2 Use PostgreSQL from Bluemix
+##### 1.2 Use PostgreSQL from Bluemix
 
 Use the Bluemix catalog or the bx command to create a service instance of Compose for PostgreSQL and add a set of credentials.
 
@@ -111,7 +117,7 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 
 ![Kubernetes Status Page](images/kube_ui_gr.png)
 
-## 2. Retrieve external ip and port for GitLab
+### 2. Retrieve external ip and port for GitLab
 
 After few minutes run the following commands to get your public IP and NodePort number.
 
@@ -130,11 +136,11 @@ gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 
 Congratulations. Now you can use the link [http://gitlab.example.com:30080](http://gitlab.example.com:30080) or http://<node_ip>:30080 to access your gitlab service from your web browser.
 
-## 3. GitLab is ready! Use GitLab to host your repositories
+### 3. GitLab is ready! Use GitLab to host your repositories
 
 Now that Gitlab is running you can [register as a new user and create a project](docs/using-gitlab.md).
 
-## Troubleshooting
+### Troubleshooting
 
 If a pod doesn't start examine the logs.
 ```bash
@@ -142,7 +148,7 @@ kubectl get pods
 kubectl logs <pod name>
 ```
 
-## Cleanup
+### Cleanup
 
 To delete all your services, deployments, and persistent volume claim, run
 
