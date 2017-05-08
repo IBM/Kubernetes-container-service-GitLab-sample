@@ -2,7 +2,7 @@
 
 # GitLab deployment on Kubernetes Cluster
 
-This project shows how a common multi-component workload, in this case GitLab, can be deployed on Kubernetes Cluster. GitLab is famous for its Git-based and code-tracking tool. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database. 
+This project shows how a common multi-component workload, in this case GitLab, can be deployed on Kubernetes Cluster. GitLab is famous for its Git-based and code-tracking tool. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
 
 By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, and more), you can deploy it to Kubernetes. This example is also deployable using Compose for PostgreSQL in Bluemix as the database.
 
@@ -93,18 +93,39 @@ $ bx service create compose-for-postgresql Standard "Compose for PostgreSQL-GL"
 $ bx service key-create "Compose for PostgreSQL-GL" Credentials-1
 ```
 
-Get the name of the target cluster and bind the credentials of the service instance to your kubernetes cluster.
+Retrieve the connection string from the credentials object for the service on Bluemix.
 
 ```bash
-$ bx cs clusters
-$ bx cs cluster-service-bind <your cluster name> default "Compose for PostgreSQL-GL"
+$ bx service key-show "Compose for PostgreSQL-GL" "Credentials-1" | grep "postgres:"
 ```
 
-Verify that the credentials have been added.
+![Postgres Connection String example](images/pg_credentials.png)
 
-```bash
-$ kubectl get secrets
+Modify your ```kubernetes/gitlab-postgres-svc.yaml``` file and replace COMPOSE_PG_PASSWORD with the password, COMPOSE_PG_HOST with the hostname, and COMPOSE_PG_PORT with the port. 
+
+Using the above example, the ```env:``` section will look like this.
+
+```yaml
+  env:
+  - name: GITLAB_OMNIBUS_CONFIG
+  value: |
+      postgresql['enable'] = false
+      gitlab_rails['db_username'] = "admin"
+      gitlab_rails['db_password'] = "ETIDRKCGOEIGBMZA"
+      gitlab_rails['db_host'] = "bluemix-sandbox-dal-9-portal.6.dblayer.com"
+      gitlab_rails['db_port'] = "26576"
+      gitlab_rails['db_database'] = "compose"
+      gitlab_rails['db_adapter'] = 'postgresql'
+      gitlab_rails['db_encoding'] = 'utf8'
+      redis['enable'] = false
+      gitlab_rails['redis_host'] = 'redis'
+      gitlab_rails['redis_port'] = '6379'
+      gitlab_rails['gitlab_shell_ssh_port'] = 30022
+      external_url 'http://gitlab.example.com:30080'
+
 ```
+
+
 Run the following commands or run the quickstart script `bash quickstart-postgres-svc.sh` with your Kubernetes cluster.
 
 ```bash
@@ -162,10 +183,9 @@ To delete your persistent volume, run
 kubectl delete pv local-volume-1 local-volume-2 local-volume-3
 ```
 
-To delete your PostgreSQL secret in kubernetes and remove the service instance from Bluemix, run
+To delete your PostgreSQL credentials and remove the service instance from Bluemix, run
 
 ```bash
-kubectl delete secret binding-compose-for-postgresql-gl
 bx service key-delete "Compose for PostgreSQL-GL" Credentials-1
 bx service delete "Compose for PostgreSQL-GL"
 ```
