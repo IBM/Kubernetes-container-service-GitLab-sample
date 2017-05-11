@@ -47,6 +47,13 @@ Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/ge
 
 If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry) to the Bluemix Container Registry.
 
+### Deploy to Bluemix
+If you want to deploy the wordpress directly to Bluemix, click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and pipeline for deploying the Gitlab sample, else jump to [Steps](##steps)
+
+[![Create Toolchain](https://github.com/IBM/container-journey-template/blob/master/images/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/?repository=https://github.com/IBM/Kubernetes-container-service-GitLab-sample)
+
+Please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions.md) to complete your toolchain and pipeline.
+
 #### Steps
 
 1. [Use Kubernetes to create Services and Deployments](#1-use-kubernetes-to-create-services-and-deployments-for-gitlab-redis-and-postgresql)
