@@ -34,4 +34,8 @@ kubectl create -f kubernetes/gitlab.yaml
 kubectl get nodes
 kubectl get svc gitlab
 
+sleep 30s
+
 echo "" && echo "View your Gitlab website at http://$IP_ADDR:30080"
+
+echo "Note: Your Gitlab may take up to 5 minutes to be fully functioning"
