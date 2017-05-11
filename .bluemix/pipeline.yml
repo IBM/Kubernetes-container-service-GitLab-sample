@@ -44,9 +44,7 @@ stages:
       application: Pipeline
     script: |
       #!/bin/bash
-      . bash scripts/install_bx.sh
-      bash scripts/bx_login.sh
-      bash scripts/deploy.sh
+      ./scripts/install_bx.sh
 hooks:
 - enabled: true
   label: null
