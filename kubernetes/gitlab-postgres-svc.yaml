@@ -57,8 +57,11 @@ spec:
           value: |
             postgresql['enable'] = false
             gitlab_rails['db_username'] = "admin"
+        # Update with password from Compose for PostgreSQL password credential
             gitlab_rails['db_password'] = "COMPOSE_PG_PASSWORD"
+        # Update with password from Compose for PostgreSQL host endpoint
             gitlab_rails['db_host'] = "COMPOSE_PG_HOST"
+        # Update with password from Compose for PostgreSQL service port
             gitlab_rails['db_port'] = "COMPOSE_PG_PORT"
             gitlab_rails['db_database'] = "compose"
             gitlab_rails['db_adapter'] = 'postgresql'
