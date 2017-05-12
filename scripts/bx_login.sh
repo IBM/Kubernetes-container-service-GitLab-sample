@@ -9,11 +9,9 @@ fi
 
 
 if ([ -z "$BLUEMIX_USER" ] || [ -z "$BLUEMIX_PASSWORD" ] || [ -z "$BLUEMIX_ACCOUNT" ]) && ([ -z "$API_KEY"]); then
-  echo "Define all required environment variables and rerun the stage."
+  echo "Define all required environment variables and re-run the stage."
   exit 1
 fi
-
-echo "Deploy pods"
 
 echo "bx login -a $CF_TARGET_URL"
 

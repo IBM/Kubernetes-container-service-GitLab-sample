@@ -19,22 +19,12 @@ echo -e "Deleting previous version of Gitlab if it exists"
 kubectl delete --ignore-not-found=true svc,pvc,deployment -l app=gitlab
 kubectl delete --ignore-not-found=true -f kubernetes/local-volumes.yaml
 
-kuber=$(kubectl get pods -l app=gitlab)
-if [ ${#kuber} -ne 0 ]; then
-	sleep 30s
-fi
-
 echo -e "Creating pods"
 kubectl create -f kubernetes/local-volumes.yaml
 kubectl create -f kubernetes/postgres.yaml
-sleep 5s
 kubectl create -f kubernetes/redis.yaml
-sleep 5s
 kubectl create -f kubernetes/gitlab.yaml
-kubectl get nodes
 kubectl get svc gitlab
-
-sleep 30s
 
 echo "" && echo "View your Gitlab website at http://$IP_ADDR:30080"
 
