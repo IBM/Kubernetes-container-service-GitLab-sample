@@ -47,7 +47,7 @@ Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/ge
 
 If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry) to the Bluemix Container Registry.
 
-### Deploy to Bluemix
+### Deploy using DevOps Toolchain to Kubernetes Cluster from Bluemix Container Service
 If you want to deploy the Gitlab directly to Bluemix, click on 'Deploy to Bluemix' button below to create a [Bluemix DevOps service toolchain and pipeline](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/toolchains_about.html#toolchains_about) for deploying the Gitlab sample, else jump to [Steps](#steps)
 
 [![Create Toolchain](https://github.com/IBM/container-journey-template/blob/master/images/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/?repository=https://github.com/IBM/Kubernetes-container-service-GitLab-sample)
