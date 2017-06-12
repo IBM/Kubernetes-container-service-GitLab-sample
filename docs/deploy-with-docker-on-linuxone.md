@@ -6,7 +6,7 @@ LinuxONE was built for open source so you can harness the agility of the open re
 
 It helps to start with a base OS image; in this case we will be
 using Ubuntu ([s390x/ubuntu](https://hub.docker.com/r/s390x/ubuntu/)).  On top
-of which, we will use very popular repository, GitLab for this example.
+of which we will install GitLab.
 
 ## Included Components
 
