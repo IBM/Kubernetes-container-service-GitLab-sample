@@ -4,10 +4,6 @@ Open source software has expanded from a low-cost alternative to a platform for 
 
 LinuxONE was built for open source so you can harness the agility of the open revolution on the industry’s most secure, scalable and high-performing Linux server. In this journey we will show how to run open source Cloud-Native workloads on LinuxONE
 
-It helps to start with a base OS image; in this case we will be
-using Ubuntu ([s390x/ubuntu](https://hub.docker.com/r/s390x/ubuntu/)).  On top
-of which we will install GitLab.
-
 ## Included Components
 
 - [LinuxONE](https://www-03.ibm.com/systems/linuxone/open-source/index.html)
@@ -31,6 +27,34 @@ $ mkdir gitlabexercise
 $ cd gitlabexercise
 ```
 
+In this exercise, we will be creating our own custom docker images.  To do so,
+we will need a base image upon which to build.  Our first step in creating a
+base RHEL image to get a copy of the `mkimage-yum.sh` script from the [Moby
+project](https://mobyproject.org)
+
+```text
+$ wget https://github.com/moby/moby/blob/master/contrib/mkimage-yum.sh
+```
+To create a RHEL image, comment out the second and third to last lines:
+```text
+#tar –numeric-owner -c -C “$target” . | docker import - $name:$version
+#docker run -i -t $name:$version echo success
+```
+And add the line:
+```text
+tar –numeric-owner -c -C “$target” . -zf ${name}.tar.gz
+```
+Next, create the RHEL tarball:
+```text
+./mkimage-yum.sh rhel7_docker
+```
+Finally, create your docker RHEL7 image:
+```text
+cat rhel7_docker.tar.gz | sudo docker import -<YOUR_NAME>/rhel7
+```
+You will need to replace `<YOUR_NAME>` with your docker hub registration name.
+
+
 You will also need a `requirements.txt` file in the directory with the contents:
 
 ```text
@@ -42,20 +66,19 @@ redis
 ### 2. Create Dockerfiles
 
 Next we need to write a few Dockerfiles to build our Docker images.  In the
-project directory, create the following three files with their respective
-content:
+project directory, create the following two files with their respective
+content, remebering to replace `<YOUR_NAME>` with your docker hub registration
+name:
 
 Dockerfile-gitlab
 ```text
-FROM s390x/ubuntu
+FROM <YOUR_NAME>/rhel7
 
-# update & upgrade the ubuntu base image
-RUN apt-get update && apt-get upgrade -y
+# update rhel base image
+RUN yum update
 
 # Install required packages
-RUN apt-get update -q \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-      ca-certificates \
+RUN yum install ca-certificates \
       openssh-server \
       wget \
       apt-transport-https \
@@ -66,7 +89,7 @@ RUN apt-get update -q \
       nano
 
 # Install the gitlab 
-RUN apt-get install -y gitlab
+RUN yum install gitlab
 
 # Manage SSHD through runit
 RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
@@ -108,9 +131,9 @@ Dockerfile-postgres
 # example Dockerfile for https://docs.docker.com/examples/postgresql_service/
 #
 
-FROM s390x/ubuntu
+FROM <YOUR_NAME>/rhel7
 
-RUN apt-get update && apt-get upgrade -y
+RUN yum update
 
 # Add the PostgreSQL PGP key to verify their Debian packages.
 # It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
@@ -119,7 +142,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL
 #  There are some warnings (in red) that show up during the build. You can hide
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y python-software-properties software-properties-common postgresql postgresql-client postgresql-contrib
+RUN yum install python-software-properties software-properties-common postgresql postgresql-client postgresql-contrib
 
 # Note: The official Debian and Ubuntu images automatically ``apt-get clean``
 # after each ``apt-get``
@@ -152,19 +175,20 @@ VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 CMD ["/usr/lib/postgresql/9.5/bin/postgres", "-D", "/var/lib/postgresql/9.5/main", "-c", "config_file=/etc/postgresql/9.5/main/postgresql.conf"]
 ```
 
-Dockerfile-redis
-
-```text
-FROM        s390x/ubuntu
-RUN         apt-get update && apt-get upgrade -y && apt-get install -y redis-server
-EXPOSE      6379
-ENTRYPOINT  ["/usr/bin/redis-server"]
-```
-
 ### 3. Define service in a Compose file
 
 Again, we are going to use docker-compose to manage our Docker images.  In the
 project directory, create a `docker-compose.yml` file that contains:
+```text
+version: '2'
+services:
+  gitlab:
+    build: Dockerfile-gitlab
+  postgres:
+    build: Dockerfile-postgres
+  redis:
+    image: "s390x/redis"
+```
 
 ### 4. Build and run
 
