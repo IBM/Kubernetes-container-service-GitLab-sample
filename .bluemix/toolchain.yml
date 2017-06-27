@@ -14,7 +14,7 @@ sample-repo:
   parameters:
     repo_name: "{{name}}"
     repo_url: https://github.com/IBM/Kubernetes-container-service-GitLab-sample
-    type: fork
+    type: clone
     has_issues: false
 
 # Pipelines
@@ -31,6 +31,11 @@ sample-build:
       PROD_SPACE_NAME: "{{deploy.parameters.prod-space}}"
       PROD_ORG_NAME: "{{deploy.parameters.prod-organization}}"
       PROD_REGION_ID: "{{deploy.parameters.prod-region}}"
+      BLUEMIX_USER: "{{deploy.parameters.bluemix-user}}"
+      BLUEMIX_PASSWORD: "{{deploy.parameters.bluemix-password}}"
+      API_KEY: "{{deploy.parameters.bluemix-api-key}}"
+      BLUEMIX_ACCOUNT: "{{deploy.parameters.bluemix-cluster-account}}"
+      CLUSTER_NAME: "{{deploy.parameters.bluemix-cluster-name}}"
      execute: true
     services: ["sample-repo"]
   hidden: [form, description]
