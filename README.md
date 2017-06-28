@@ -162,6 +162,8 @@ gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 
 > Note: The gitlab external url is set to `gitlab.example.com` add this to your hosts file pointing to your IP address from above in order to use the url that gitlab expects. If you can't do this, then using the IP (in this example 169.47.241.22) should work.
 
+> Note: If you using Minikube for local kubernetes deployment, you can access the list of service IPs using the `minikube service list` command.
+
 Congratulations. Now you can use the link [http://gitlab.example.com:30080](http://gitlab.example.com:30080) or http://<node_ip>:30080 to access your gitlab service from your web browser.
 
 ### 3. GitLab is ready! Use GitLab to host your repositories
