@@ -34,7 +34,7 @@ $ sudo docker rm gitlab
 
 ## Multiple Container deployment via Docker Compose
 
-It's easy to connect gitlab to external PostgreSQL and Redis services by making a few tweaks to the environment variables passed to the gitlab container.  In the root of this repo is a [docker-compose.yml](docker-compose.yml) file which will demonstrate a multiple container deployment that you can run locally or against a remote docker server.
+It's easy to connect gitlab to external PostgreSQL and Redis services by making a few tweaks to the environment variables passed to the gitlab container.  In the root of this repo is a [docker-compose.yml](../docker-compose.yml) file which will demonstrate a multiple container deployment that you can run locally or against a remote docker server.
 
 ### Deploy
 
