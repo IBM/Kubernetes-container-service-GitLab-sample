@@ -66,7 +66,24 @@ RUN apt-get update -q \
       nano
 
 # Install the gitlab 
-RUN apt-get install -y gitlab
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gitlab; exit 0
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq cmake \
+    libmysqlclient-dev \
+    automake \
+    autogen \
+    bundler; exit 0
+
+WORKDIR /usr/share/gitlab
+RUN bundler; exit 0
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pkg-config; exit 0
+
+RUN gem install rugged -v '0.23.3'
+RUN bundler
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gitlab
+
 
 # Manage SSHD through runit
 RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
@@ -164,10 +181,67 @@ ENTRYPOINT  ["/usr/bin/redis-server"]
 ### 3. Define service in a Compose file
 
 Again, we are going to use docker-compose to manage our Docker images.  In the
-project directory, create a `docker-compose.yml` file that contains:
+project directory, create a `docker-compose.yml` file that contains a slightly
+modified version of the file by the same name in the root of this repo:
+
+```text
+gitlab:
+#  image: 'gitlab/gitlab-ce:9.1.0-ce.0'
+  build: .
+  dockerfile: Dockerfile-gitlab
+  restart: always
+  hostname: 'gitlab.example.com'
+  links:
+    - postgresql:postgresql
+    - redis:redis
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      postgresql['enable'] = false
+      gitlab_rails['db_username'] = "gitlab"
+      gitlab_rails['db_password'] = "gitlab"
+      gitlab_rails['db_host'] = "postgresql"
+      gitlab_rails['db_port'] = "5432"
+      gitlab_rails['db_database'] = "gitlabhq_production"
+      gitlab_rails['db_adapter'] = 'postgresql'
+      gitlab_rails['db_encoding'] = 'utf8'
+      redis['enable'] = false
+      gitlab_rails['redis_host'] = 'redis'
+      gitlab_rails['redis_port'] = '6379'
+      external_url 'http://gitlab.example.com:30080'
+      gitlab_rails['gitlab_shell_ssh_port'] = 30022
+  ports:
+# both ports must match the port from external_url above
+    - "30080:30080"
+# the mapped port must match ssh_port specified above.
+    - "30022:22"
+# the following are hints on what volumes to mount if you want to persist data
+#  volumes:
+#    - data/gitlab/config:/etc/gitlab:rw
+#    - data/gitlab/logs:/var/log/gitlab:rw
+#    - data/gitlab/data:/var/opt/gitlab:rw
+
+postgresql:
+  restart: always
+#  image: postgres:9.6.2-alpine
+  build: .
+  dockerfile: Dockerfile-postgres
+  environment:
+    - POSTGRES_USER=gitlab
+    - POSTGRES_PASSWORD=gitlab
+    - POSTGRES_DB=gitlabhq_production
+# the following are hints on what volumes to mount if you want to persist data
+#  volumes:
+#    - data/postgresql:/var/lib/postgresql:rw
+
+redis:
+  restart: always
+#  image: redis:3.0.7-alpine
+  build: .
+  dockerfile: Dockerfile-redis
+```
 
 ### 4. Build and run
 
 ```text
-$ docker-compose up
+$ docker-compose up -d --build
 ```
