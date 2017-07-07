@@ -47,63 +47,93 @@ content:
 
 Dockerfile-gitlab
 ```text
-FROM s390x/ubuntu
+M s390x/ubuntu
 
 # update & upgrade the ubuntu base image
-RUN apt-get update && apt-get upgrade -y
+RUN apt-get update -y && apt-get upgrade -y
 
 # Install required packages
-RUN apt-get update -q \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-      ca-certificates \
-      openssh-server \
-      wget \
-      apt-transport-https \
-      vim \
-      apt-utils \
+RUN apt-get install -y build-essential \
+      zlib1g-dev \
+      libyaml-dev \
+      libssl-dev \
+      libgdbm-dev \
+      libreadline-dev \
+      libncurses5-dev \
+      libffi-dev \
       curl \
-      postfix \
-      nano
+      openssh-server \
+      checkinstall \
+      libxml2-dev \
+      libxslt-dev \
+      libcurl4-openssl-dev \
+      libicu-dev \
+      logrotate \
+      python-docutils \
+      pkg-config \
+      cmake \
+      nodejs
 
-# Install the gitlab 
+# Install Git
+RUN apt-get install -y git-core
+
+# Ruby
+RUN mkdir /tmp/ruby
+WORKDIR /tmp/ruby
+RUN curl -O --progress https://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.10.tar.gz
+RUN tar xzf ruby-2.1.10.tar.gz
+WORKDIR /tmp/ruby/ruby-2.1.10
+RUN ./configure --disable-install-rdoc
+RUN make
+RUN make install
+RUN gem install bundler --no-ri --no-rdoc
+
+# Go
+RUN apt install -y golang-go
+
+# Create `git` user
+RUN adduser --disabled-login --gecos 'Gitlab' git
+
+# Database
+RUN apt-get install -y postgresql-client libpq-dev
+
+# Gitlab
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gitlab; exit 0
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq cmake \
-    libmysqlclient-dev \
-    automake \
-    autogen \
-    bundler; exit 0
+# after install failure, fix gemfile
+RUN sed -i "s|'gem "mysql2"'|'#gem "mysql2"' |g" /usr/share/gitlab/Gemfile
+RUN sed -i "s|'gem "pg"'|'#gem "pg"' |g" /usr/share/gitlab/Gemfile
+RUN sed -i "s|'gem "omniauth-kerbros"'|'#gem "omniauth-kerbros"' |g" /usr/share/gitlab/Gemfile
+RUN sed -i "s|'gem "state_machines-activerecord", '~> 0.3.0''|'gem "state_machines-activerecord", '~> 0.5.0'' |g" /usr/share/gitlab/Gemfile
+RUN echo "gem "pg", "~> 0.18.2"" >> /usr/share/gitlab/Gemfile
 
 WORKDIR /usr/share/gitlab
 RUN bundler; exit 0
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pkg-config; exit 0
 
-RUN gem install rugged -v '0.23.3'
-RUN bundler
+# add database connection and initialize
+RUN sed -i "s|/var/run/postgresql|"postgresql/n  port:5432\n" |g" /usr/share/gitlab/config/database.yml
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gitlab
+# configure redis
+RUN sed -i "s|localhost|redis |g" /usr/share/gitlab/config/resque.yml
 
+RUN sed -i "s|'app_user="git"'|'app_user="gitlab" |g" /etc/init.d/gitlab
 
-# Manage SSHD through runit
-RUN mkdir -p /opt/gitlab/sv/sshd/supervise \
-    && mkfifo /opt/gitlab/sv/sshd/supervise/ok \
-    && printf "#!/bin/sh\nexec 2>&1\numask 077\nexec /usr/sbin/sshd -D" > /opt/gitlab/sv/sshd/run \
-    && chmod a+x /opt/gitlab/sv/sshd/run \
-    && ln -s /opt/gitlab/sv/sshd /opt/gitlab/service \
-    && mkdir -p /var/run/sshd
+USER gitlab
+# initialize database
+RUN bundle exec rake gitlab:setup RAILS_ENV=production
 
-# Disabling use DNS in ssh since it tends to slow connecting
-RUN echo "UseDNS no" >> /etc/ssh/sshd_config
+# compile assets
+RUN bundle exec rake assets:precompile RAILS_ENV=production
 
-# Prepare default configuration
-RUN ( \
-  echo "" && \
-  echo "# Docker options" && \
-  echo "# Prevent Postgres from trying to allocate 25% of total memory" && \
-  echo "postgresql['shared_buffers'] = '1MB'" ) >> /etc/gitlab/gitlab.rb && \
-  mkdir -p /assets/ && \
-  cp /etc/gitlab/gitlab.rb /assets/gitlab.rb
+# start gitlab instance
+RUN service gitlab start
+
+# nginx
+RUN apt-get install -y nginx
+RUN service nginx restart
 
 # Expose web & ssh
 EXPOSE 443 80 22
@@ -111,13 +141,10 @@ EXPOSE 443 80 22
 # Define data volumes
 VOLUME ["/etc/gitlab", "/var/opt/gitlab", "/var/log/gitlab"]
 
-# Copy assets
-COPY assets/wrapper /usr/local/bin/
-
 # Wrapper to handle signal, trigger runit and reconfigure GitLab
-CMD ["/usr/local/bin/wrapper"]
+#CMD ["/usr/local/bin/wrapper"]
+CMD /etc/init.d/gitlab restart
 ```
-
 Dockerfile-postgres
 
 ```text
