@@ -31,120 +31,25 @@ $ mkdir gitlabexercise
 $ cd gitlabexercise
 ```
 
-You will also need a `requirements.txt` file in the directory with the contents:
-
-```text
-gitlab
-postgres
-redis
-```
-
 ### 2. Create Dockerfiles
 
-Next we need to write a few Dockerfiles to build our Docker images.  In the
-project directory, create the following three files with their respective
-content:
+For this exercise, we will need a total of three containers, one each for
+Redis, Postgresql, and Gitlab.  Docker images must be specially created for
+the z Systems platform, and currently there a limited number of these that
+exist.  But lucky for us, there is already an image for
+[Redis](https://hub.docker.com/r/s390x/redis/), so we will be using it!
 
-Dockerfile-gitlab
-```text
-M s390x/ubuntu
+For Gitlab and Postgresql, however, s390x images do not exist, so we will have
+to get a bit creative.  For Gitlab, the heavy lifting has already been done
+for us in a separate
+[repo](https://github.com/IBM/container-service-gitlab-sample).  We merely
+need to copy the contents of the Gitlab container directory, which consists of
+two install scripts and a Dockerfile.  Thanks to the portability of docker
+images, all we have to do is change the first line of the Dockerfile from
+`FROM alpine:3.5` to `FROM s390x/alpine`
 
-# update & upgrade the ubuntu base image
-RUN apt-get update -y && apt-get upgrade -y
+The only Dockerfile we will need to write is for Postgresql:
 
-# Install required packages
-RUN apt-get install -y build-essential \
-      zlib1g-dev \
-      libyaml-dev \
-      libssl-dev \
-      libgdbm-dev \
-      libreadline-dev \
-      libncurses5-dev \
-      libffi-dev \
-      curl \
-      openssh-server \
-      checkinstall \
-      libxml2-dev \
-      libxslt-dev \
-      libcurl4-openssl-dev \
-      libicu-dev \
-      logrotate \
-      python-docutils \
-      pkg-config \
-      cmake \
-      nodejs
-
-# Install Git
-RUN apt-get install -y git-core
-
-# Ruby
-RUN mkdir /tmp/ruby
-WORKDIR /tmp/ruby
-RUN curl -O --progress https://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.10.tar.gz
-RUN tar xzf ruby-2.1.10.tar.gz
-WORKDIR /tmp/ruby/ruby-2.1.10
-RUN ./configure --disable-install-rdoc
-RUN make
-RUN make install
-RUN gem install bundler --no-ri --no-rdoc
-
-# Go
-RUN apt install -y golang-go
-
-# Create `git` user
-RUN adduser --disabled-login --gecos 'Gitlab' git
-
-# Database
-RUN apt-get install -y postgresql-client libpq-dev
-
-# Gitlab
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gitlab; exit 0
-
-# after install failure, fix gemfile
-RUN sed -i "s|'gem "mysql2"'|'#gem "mysql2"' |g" /usr/share/gitlab/Gemfile
-RUN sed -i "s|'gem "pg"'|'#gem "pg"' |g" /usr/share/gitlab/Gemfile
-RUN sed -i "s|'gem "omniauth-kerbros"'|'#gem "omniauth-kerbros"' |g" /usr/share/gitlab/Gemfile
-RUN sed -i "s|'gem "state_machines-activerecord", '~> 0.3.0''|'gem "state_machines-activerecord", '~> 0.5.0'' |g" /usr/share/gitlab/Gemfile
-RUN echo "gem "pg", "~> 0.18.2"" >> /usr/share/gitlab/Gemfile
-
-WORKDIR /usr/share/gitlab
-RUN bundler; exit 0
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pkg-config; exit 0
-
-# add database connection and initialize
-RUN sed -i "s|/var/run/postgresql|"postgresql/n  port:5432\n" |g" /usr/share/gitlab/config/database.yml
-
-# configure redis
-RUN sed -i "s|localhost|redis |g" /usr/share/gitlab/config/resque.yml
-
-RUN sed -i "s|'app_user="git"'|'app_user="gitlab" |g" /etc/init.d/gitlab
-
-USER gitlab
-# initialize database
-RUN bundle exec rake gitlab:setup RAILS_ENV=production
-
-# compile assets
-RUN bundle exec rake assets:precompile RAILS_ENV=production
-
-# start gitlab instance
-RUN service gitlab start
-
-# nginx
-RUN apt-get install -y nginx
-RUN service nginx restart
-
-# Expose web & ssh
-EXPOSE 443 80 22
-
-# Define data volumes
-VOLUME ["/etc/gitlab", "/var/opt/gitlab", "/var/log/gitlab"]
-
-# Wrapper to handle signal, trigger runit and reconfigure GitLab
-#CMD ["/usr/local/bin/wrapper"]
-CMD /etc/init.d/gitlab restart
-```
 Dockerfile-postgres
 
 ```text
@@ -196,75 +101,47 @@ VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 CMD ["/usr/lib/postgresql/9.5/bin/postgres", "-D", "/var/lib/postgresql/9.5/main", "-c", "config_file=/etc/postgresql/9.5/main/postgresql.conf"]
 ```
 
-Dockerfile-redis
-
-```text
-FROM        s390x/ubuntu
-RUN         apt-get update && apt-get upgrade -y && apt-get install -y redis-server
-EXPOSE      6379
-ENTRYPOINT  ["/usr/bin/redis-server"]
-```
-
 ### 3. Define service in a Compose file
 
 Again, we are going to use docker-compose to manage our Docker images.  In the
 project directory, create a `docker-compose.yml` file that contains a slightly
-modified version of the file by the same name in the root of this repo:
+modified version of the file by the same name in the root of the
+[repo](https://github.com/IBM/container-service-gitlab-sample) from which we
+borrowed our gitlab dockerfile:
 
 ```text
-gitlab:
-#  image: 'gitlab/gitlab-ce:9.1.0-ce.0'
-  build: .
-  dockerfile: Dockerfile-gitlab
-  restart: always
-  hostname: 'gitlab.example.com'
-  links:
-    - postgresql:postgresql
-    - redis:redis
-  environment:
-    GITLAB_OMNIBUS_CONFIG: |
-      postgresql['enable'] = false
-      gitlab_rails['db_username'] = "gitlab"
-      gitlab_rails['db_password'] = "gitlab"
-      gitlab_rails['db_host'] = "postgresql"
-      gitlab_rails['db_port'] = "5432"
-      gitlab_rails['db_database'] = "gitlabhq_production"
-      gitlab_rails['db_adapter'] = 'postgresql'
-      gitlab_rails['db_encoding'] = 'utf8'
-      redis['enable'] = false
-      gitlab_rails['redis_host'] = 'redis'
-      gitlab_rails['redis_port'] = '6379'
-      external_url 'http://gitlab.example.com:30080'
-      gitlab_rails['gitlab_shell_ssh_port'] = 30022
-  ports:
-# both ports must match the port from external_url above
-    - "30080:30080"
-# the mapped port must match ssh_port specified above.
-    - "30022:22"
-# the following are hints on what volumes to mount if you want to persist data
-#  volumes:
-#    - data/gitlab/config:/etc/gitlab:rw
-#    - data/gitlab/logs:/var/log/gitlab:rw
-#    - data/gitlab/data:/var/opt/gitlab:rw
-
 postgresql:
   restart: always
-#  image: postgres:9.6.2-alpine
+#  image: registry.ng.bluemix.net/${NAMESPACE}/gitlab-postgres:latest
   build: .
   dockerfile: Dockerfile-postgres
   environment:
-    - POSTGRES_USER=gitlab
-    - POSTGRES_PASSWORD=gitlab
-    - POSTGRES_DB=gitlabhq_production
-# the following are hints on what volumes to mount if you want to persist data
-#  volumes:
-#    - data/postgresql:/var/lib/postgresql:rw
-
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlabhq_production
+  volumes:
+    - postgresql:/var/lib/postgresql:rw
+gitlab:
+  restart: always
+#  image: registry.ng.bluemix.net/${NAMESPACE}/gitlab:latest
+  build: .
+  dockerfile: Dockerfile-gitlab
+  links:
+    - redis:redis
+    - postgresql:postgresql
+  ports:
+    - "80:80"
+    - "22:22"
+  environment:
+    - GITLAB_HOST=my.gitlab-server
+  volumes:
+    - gitlab:/home/git/data:rw
 redis:
   restart: always
-#  image: redis:3.0.7-alpine
-  build: .
-  dockerfile: Dockerfile-redis
+#  image: registry.ng.bluemix.net/${NAMESPACE}/redis:latest
+  image: s390x/redis
+  volumes:
+    - redis:/var/lib/redis:rw
 ```
 
 ### 4. Build and run
