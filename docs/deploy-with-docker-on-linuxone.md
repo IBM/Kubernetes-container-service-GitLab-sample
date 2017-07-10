@@ -48,13 +48,17 @@ two install scripts and a Dockerfile.  Thanks to the portability of docker
 images, all we have to do is change the first line of the Dockerfile from
 `FROM alpine:3.5` to `FROM s390x/alpine`
 
-The only Dockerfile we will need to write is for Postgresql:
+For Postgres, we are going to borrow a Dockerfile from the [docker docs]
+(https://docs.docker.com/engine/examples/postgresql_service/) site.  Again, the
+only changes we will be making is modifying the base image to be compatable
+with LinuxONE (changing `FROM ubuntu` to 'FROM s390x/ubuntu`) and adding our
+database setup script:
 
 Dockerfile-postgres
 
 ```text
 #
-# example Dockerfile for https://docs.docker.com/examples/postgresql_service/
+# example Dockerfile for https://docs.docker.com/engine/examples/postgresql_service/
 #
 
 FROM s390x/ubuntu
@@ -90,6 +94,9 @@ RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.5/main/pg_hba.co
 
 # And add ``listen_addresses`` to ``/etc/postgresql/9.5/main/postgresql.conf``
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
+
+# copy database setup script
+COPY gitlab-db-setup.sh /docker-entrypoint-initdb.d/
 
 # Expose the PostgreSQL port
 EXPOSE 5432
