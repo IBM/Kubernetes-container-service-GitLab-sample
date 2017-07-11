@@ -1,0 +1,30 @@
+postgresql:
+  restart: always
+  build: .
+  dockerfile: Dockerfile-postgres
+  environment:
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlabhq_production
+  volumes:
+    - postgresql:/var/lib/postgresql:rw
+gitlab:
+  restart: always
+  build: .
+  dockerfile: Dockerfile-gitlab
+  links:
+    - redis:redis
+    - postgresql:postgresql
+  ports:
+    - "30080:80"
+    - "30022:22"
+  environment:
+    - GITLAB_HOST=my.gitlab-server
+  volumes:
+    - gitlab:/home/git/data:rw
+redis:
+  restart: always
+  image: s390x/redis
+  volumes:
+    - redis:/var/lib/redis:rw
+
