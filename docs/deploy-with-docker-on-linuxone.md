@@ -38,13 +38,9 @@ $ cd gitlabexercise
 
 Copy the files found in the `linuxone` folder:
 
-```text
-docker-compose.yml 
-Dockerfile-gitlab 
-Dockerfile-postgres
-entrypoint.sh 
-gitlab-db-setup.sh 
-install.sh 
+```shell
+$ git clone https://github.com/IBM/Kubernetes-container-service-Gitlab-sample.git
+$ cp Kubernetes-container-service-Gitlab-sample/linuxone/* .
 ```
 
 ### 3. Build and run
