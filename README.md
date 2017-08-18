@@ -71,7 +71,7 @@ Ensure your kubernetes cluster is reachable by running the `kubectl` command.
 ```bash
 $ kubectl get nodes
 NAME             STATUS    AGE       VERSION
-x.x.x.x   Ready     17h       v1.5.3-2+be7137fd3ad68f
+x.x.x.x          Ready     17h       v1.5.3-2+be7137fd3ad68f
 ```
 
 > Note: If this step fails see troubleshooting docs at [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) or [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_troubleshoot.html#cs_troubleshoot).
@@ -152,9 +152,10 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 After few minutes run the following commands to get your public IP and NodePort number.
 
 ```bash
-$ kubectl get nodes
-NAME             STATUS    AGE
-169.47.241.22   Ready     23h
+$ $ bx cs workers <cluster_name>
+OK
+ID                                                 Public IP       Private IP     Machine Type   State    Status   
+kube-hou02-pa817264f1244245d38c4de72fffd527ca-w1   169.47.241.22   10.10.10.148   free           normal   Ready 
 $ kubectl get svc gitlab
 NAME      CLUSTER-IP     EXTERNAL-IP   PORT(S)                     AGE
 gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
