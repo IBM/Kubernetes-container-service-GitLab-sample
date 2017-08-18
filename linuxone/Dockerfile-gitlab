@@ -1,0 +1,9 @@
+FROM s390x/alpine
+
+ENV LANG en_US.utf8
+
+COPY install.sh entrypoint.sh /
+RUN chmod 755 /entrypoint.sh
+RUN adduser -D -s /bin/sh -g 'Gitlab' git && sh /install.sh && rm /install.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
