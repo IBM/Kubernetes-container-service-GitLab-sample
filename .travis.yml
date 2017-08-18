@@ -1,20 +1,28 @@
+---
+language: python
+python: 2.7
 sudo: required
+
+addons:
+  apt:
+    sources:
+      - debian-sid
+    packages:
+      - shellcheck
+
+install:
+  - pip install -U pip
+  - pip install yamllint
+  - wget http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/Bluemix_CLI_0.5.1_amd64.tar.gz
+    -O /tmp/bx.tar.gz
+  - tar xf /tmp/bx.tar.gz -C /tmp
+  - sudo /tmp/Bluemix_CLI/install_bluemix_cli
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+  - chmod +x kubectl
+  - sudo mv kubectl /usr/local/bin
+
 before_script:
-- wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key |
-  sudo apt-key add -
-- echo "deb http://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-- sudo apt-get update
-- sudo apt-get install cf-cli -y
-- wget http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/Bluemix_CLI_0.5.1_amd64.tar.gz
-  -O /tmp/bx.tar.gz
-- tar xf /tmp/bx.tar.gz -C /tmp
-- sudo /tmp/Bluemix_CLI/install_bluemix_cli
-- curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-- chmod +x kubectl
-- sudo mv kubectl /usr/local/bin
+  - "./tests/test-shellcheck.sh"
+  - "./tests/test-yamllint.sh"
+
 script: true
-env:
-  global:
-  - secure: JWfW2aekuP73UUyVrUpvltnN5SPaIrDKYzcH7V54TzjDkZ/98a9nu15te5e1WRUb1W0gZtYnQexfLjdJjtweGMSFvfR0J44MYQt2a2qOExHPU6zYvrIpt91mHKvX3ymjCVVkhxfv85IXKTAsXy2DDFw7WvDBdauwdEIqDauU8EnnRzdSP21UVOA2aMn+RZp2aUziUXDOqZIIzDvzLs3V0VrAuHEyLsttPkijV9KrMFYkOGMpNYzQInfJOSo/6QkaiIwUntP++LQRTWWpFpX8K2N1rTmr4GVcF3jww2u+0E6Pl282n26KFOMU3RMbi+9gq3jqKPlbHT/uXRnmISwBhi70+s9WUxSrYH7cUFOEHohWtUUfsEwf5l9bk6pgQ8cazeKdS869EG67Y8PKMJ0NaQUGDzLm+0l1DL5CJboJYuT9OEVPcqsaP5/YegRmNkiaUmobIJUN65lbPFnLJJXq28EHfndHT/EHVFuhbb0a86459SWeGL23Sqc3zKfsQdkqcvwEVPQUyNF/pk4udii1g4UqOYsr57q1fKdYnT6EXUbubsqvk+vwkTeXEjycIdgE+3SRJ1+8C5RqGgMo/CZooddVzzT55hAcyy6JrOCNcdGh3zZm87J6uVUgSCOzVXLVfo8OVG+VJEIWydgDH9pNtGArSsmevg2JXbVpbev98LA=
-  - secure: YTUTRQYxCXpzcAnuSCJbicySYOPmqBVTIaqglpFluDBV9XnT5I0UAnHOZdB/Dp0EcQNrT/ML9y+Hwpo7P7Cc7bOqhezhb4GQkh27bb8QBKoG36mD6hIFpS0agNFJMS6Knw+ORf8kAWr2jyth0tEhC8zum+Uis3BqNvbL3KYDOL+HjSfffI5gk1d1ASbaqApLHpEyN2pewqFOYfyz7ZD5GK5cc8dwSk7JvuUqWqYZH9Bd7MgKa8aPcVgjrmiuTsCMyQe9Fjd18x36iYs9N4z0I2Qz7XkD30J/gCVC/tKbXpAWzC9BAyFUY806MDGGpT4XKVgUkkKPO78nBEz1s/A4WrW7x4/Vlfh5IYTEGLu2N9o7e33RE5Ec38JDmGHR6yL9SjIqkq6SxEK76xOsBtwkmxyYHZmsmjPaW20VWXmdzrAXxckNggmM8wgf1jHk4E7vlKzrjmd5N278HuKF0tr5Sxrf8LVxMAS7pbUnUa26xut2On+ITYd4Vn4XJ9bLCO9reQOfvsOHTjbHNq5JwXK1QXNL5LV1vjcXw5S0H+xTovlRC8phk7NeWReZuFeT+h2ksHlsYH8R8e8fT+nNlXy/uoPrWXVobJAjowh5V7oOchm/0i5/jrzAFV6ON3ZrUqrOOYSQbZ3h/4jQf0UP63oPbBr17xgbtsAmXB4RipQ0ktc=
-  - secure: GPG087lVaNdjHOpv2obmGY+DhxCwz700E8Mo7Yer9ZrXHcnYN9V0dh/fRMU8C04aNW2ZvNa6RNZl/BNMKgQfPx+eEjpX0k8kqJ5fEFgFv7GMWacX89fzAf9mRoqoFV5YnIn/7QMOcN6Mgh5hNPEFRX30VkOrTAm7v/ykRLeoXUVpyhhy1d2Ig/Cv+e67Gz4vQmSoTvKAULBhge5hbMfkK2yutOuSu5hGUj+oCmQDzFHjb4+L4TwQoz58iN0SYc3QHQPTdUJEg+bQvIz7nMNX9koH3EtXo3WCxyqgCTYrfp9pVZaCiWC7EyuA3I15fzBr5aLI0y4bpMBQMLbviskkI5CqyJMavEDPyb285UshoxoLQ9FuPEIepBKpHMZxJQKZ90434cmav9DrlQnU0aApVJMFlHnS6Qg0+UAwyCQsooSe5GzWsJP5UXLrETaHwg1Y+migc73xkE/PkiO0FQxll7z2L3imnMLO3vymW6p2FkpnynrkQelsiSuVx7J5aU88L2gyBwyopwHppgbK/sWlXmB6S2of9T5YB2lZwycxqi6P0WF9jyxazJOLfU2McJ/6BeU8KYXnzTKdpqT4XKuvAa8L7Mlk4Utd1f/Ng0wuh4L8ZU7gU6j/KC1KoQwOCvbl3YjKf5Vc8EYvnUkEfI8OLm0EWLfZdmo3+1oKmDjI9Po=

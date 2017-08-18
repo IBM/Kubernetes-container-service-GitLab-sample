@@ -10,40 +10,40 @@ required:
 
 # Github repos
 sample-repo:
-  service_id: githubpublic
-  parameters:
-    repo_name: "{{name}}"
-    repo_url: https://github.com/IBM/Kubernetes-container-service-GitLab-sample
-    type: clone
-    has_issues: false
+ service_id: githubpublic
+ parameters:
+  repo_name: "{{name}}"
+  repo_url: https://github.com/IBM/Kubernetes-container-service-GitLab-sample
+  type: clone
+  has_issues: false
 
 # Pipelines
 sample-build:
-  service_id: pipeline
-  parameters:
-    name: "{{name}}"
-    ui-pipeline: true
-    configuration:
-     content: $file(pipeline.yml)
-     env:
-      SAMPLE_REPO: "sample-repo"
-      CF_APP_NAME: "{{deploy.parameters.prod-app-name}}"
-      PROD_SPACE_NAME: "{{deploy.parameters.prod-space}}"
-      PROD_ORG_NAME: "{{deploy.parameters.prod-organization}}"
-      PROD_REGION_ID: "{{deploy.parameters.prod-region}}"
-      BLUEMIX_USER: "{{deploy.parameters.bluemix-user}}"
-      BLUEMIX_PASSWORD: "{{deploy.parameters.bluemix-password}}"
-      API_KEY: "{{deploy.parameters.bluemix-api-key}}"
-      BLUEMIX_ACCOUNT: "{{deploy.parameters.bluemix-cluster-account}}"
-      CLUSTER_NAME: "{{deploy.parameters.bluemix-cluster-name}}"
-     execute: true
-    services: ["sample-repo"]
-  hidden: [form, description]
+ service_id: pipeline
+ parameters:
+  name: "{{name}}"
+  ui-pipeline: true
+  configuration:
+   content: $file(pipeline.yml)
+   env:
+    SAMPLE_REPO: "sample-repo"
+    CF_APP_NAME: "{{deploy.parameters.prod-app-name}}"
+    PROD_SPACE_NAME: "{{deploy.parameters.prod-space}}"
+    PROD_ORG_NAME: "{{deploy.parameters.prod-organization}}"
+    PROD_REGION_ID: "{{deploy.parameters.prod-region}}"
+    BLUEMIX_USER: "{{deploy.parameters.bluemix-user}}"
+    BLUEMIX_PASSWORD: "{{deploy.parameters.bluemix-password}}"
+    API_KEY: "{{deploy.parameters.bluemix-api-key}}"
+    BLUEMIX_ACCOUNT: "{{deploy.parameters.bluemix-cluster-account}}"
+    CLUSTER_NAME: "{{deploy.parameters.bluemix-cluster-name}}"
+   execute: true
+  services: ["sample-repo"]
+ hidden: [form, description]
 
-#Deployment
+# Deployment
 deploy:
-  schema:
-    $ref: deploy.json
-  service-category: pipeline
-  parameters:
-    prod-app-name: "{{sample-repo.parameters.repo_name}}"
+ schema:
+  $ref: deploy.json
+ service-category: pipeline
+ parameters:
+  prod-app-name: "{{sample-repo.parameters.repo_name}}"
