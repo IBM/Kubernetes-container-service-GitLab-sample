@@ -1,3 +1,4 @@
+---
 gitlab:
   image: 'gitlab/gitlab-ce:9.1.0-ce.0'
   restart: always
@@ -21,9 +22,9 @@ gitlab:
       external_url 'http://gitlab.example.com:30080'
       gitlab_rails['gitlab_shell_ssh_port'] = 30022
   ports:
-# both ports must match the port from external_url above
+    # both ports must match the port from external_url above
     - "30080:30080"
-# the mapped port must match ssh_port specified above.
+    # the mapped port must match ssh_port specified above.
     - "30022:22"
 # the following are hints on what volumes to mount if you want to persist data
 #  volumes:
@@ -45,7 +46,3 @@ postgresql:
 redis:
   restart: always
   image: redis:3.0.7-alpine
-
-
-
-

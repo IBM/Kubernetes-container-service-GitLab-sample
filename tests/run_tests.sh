@@ -22,13 +22,13 @@ function run_tests() {
 	sleep 20
 
 	RUNNING=$(kubectl get pods | grep -c Running)
-	if [ $RUNNING -ne 3 ]; then
+	if [ "$RUNNING" -ne 3 ]; then
 		exit_tests 1
 	fi;
 
 	sleep 60
 	IP=$(kubectl get nodes | awk 'NR>1 {print $1}')
-	curl -f http://$IP:30080 -o /dev/null || exit_tests 1
+	curl -f http://"$IP":30080 -o /dev/null || exit_tests 1
 
 
 	exit_tests 0
@@ -37,7 +37,7 @@ function run_tests() {
 function exit_tests() {
 	kubectl delete pv local-volume-1 local-volume-2 local-volume-3
 	kubectl delete deployment,service,pvc -l app=gitlab
-	exit $1
+	exit 1
 }
 
 
