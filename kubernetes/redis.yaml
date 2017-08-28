@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,15 +42,15 @@ spec:
         tier: backend
     spec:
       containers:
-      - image: redis:3.0.7-alpine
-        name: redis
-        ports:
-        - containerPort: 6379
+        - image: redis:3.0.7-alpine
           name: redis
-        volumeMounts:
-        - name: redis
-          mountPath: /var/lib/redis:rw
+          ports:
+            - containerPort: 6379
+              name: redis
+          volumeMounts:
+            - name: redis
+              mountPath: /var/lib/redis:rw
       volumes:
-      - name: redis
-        persistentVolumeClaim:
-          claimName: redis-claim
+        - name: redis
+          persistentVolumeClaim:
+            claimName: redis-claim
