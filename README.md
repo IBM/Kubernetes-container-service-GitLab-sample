@@ -78,7 +78,7 @@ x.x.x.x          Ready     17h       v1.5.3-2+be7137fd3ad68f
 
 ##### 1.1 Use PostgreSQL in container
 
-If you are using a container image to run PostgreSQL, run the following commands or run the quickstart script `bash quickstart.sh` with your Kubernetes cluster.
+If you are using a container image to run PostgreSQL, run the following commands or run the quickstart script `./scripts/quickstart.sh` with your Kubernetes cluster.
 
 ```bash
 $ kubectl create -f kubernetes/local-volumes.yaml
@@ -135,7 +135,7 @@ Using the above example, the ```env:``` section will look like this.
 ```
 
 
-Run the following commands or run the quickstart script `bash quickstart-postgres-svc.sh` with your Kubernetes cluster.
+Run the following commands or run the quickstart script `./scripts/quickstart-postgres-svc.sh` with your Kubernetes cluster.
 
 ```bash
 $ kubectl create -f kubernetes/local-volumes.yaml
