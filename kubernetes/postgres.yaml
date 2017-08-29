@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,22 +41,22 @@ spec:
         tier: postgreSQL
     spec:
       containers:
-      - image: postgres:9.6.2-alpine
-        name: postgresql
-        env:
-          - name: POSTGRES_USER
-            value : gitlab
-          - name: POSTGRES_DB
-            value : gitlabhq_production
-          - name: POSTGRES_PASSWORD
-            value: gitlab
-        ports:
-        - containerPort: 5432
+        - image: postgres:9.6.2-alpine
           name: postgresql
-        volumeMounts:
-        - name: postgresql
-          mountPath: /var/lib/postgresql:rw
+          env:
+            - name: POSTGRES_USER
+              value: gitlab
+            - name: POSTGRES_DB
+              value: gitlabhq_production
+            - name: POSTGRES_PASSWORD
+              value: gitlab
+          ports:
+            - containerPort: 5432
+              name: postgresql
+          volumeMounts:
+            - name: postgresql
+              mountPath: /var/lib/postgresql:rw
       volumes:
-      - name: postgresql
-        persistentVolumeClaim:
-          claimName: postgres-claim
+        - name: postgresql
+          persistentVolumeClaim:
+            claimName: postgres-claim
