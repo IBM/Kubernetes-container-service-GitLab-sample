@@ -20,7 +20,7 @@ spec:
   selector:
     app: gitlab
     tier: frontend
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
