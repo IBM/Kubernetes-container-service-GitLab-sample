@@ -91,7 +91,7 @@ After you have created all the services and deployments, wait for 3 to 5 minutes
 
 ![Kubernetes Status Page](images/kube_ui.png)
 
-Next [retrieve your external ip and port for GitLab](2-retrieve-external-ip-and-port-for-GitLab)
+Next [retrieve your external ip and port for GitLab](#2-retrieve-external-ip-and-port-for-GitLab)
 
 ##### 1.2 Use PostgreSQL from Bluemix
 
