@@ -13,20 +13,22 @@ addons:
     packages:
       - shellcheck
 
-install:
-  - pip install -U pip
+matrix:
+  fast_finish: true
+
+env:
+  - TEST_RUN="./tests/test-docker-compose.sh"
+  - TEST_RUN="./tests/test-kubernetes.sh"
+
+before_install:
   - pip install yamllint
-  - wget http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/Bluemix_CLI_0.5.1_amd64.tar.gz
-    -O /tmp/bx.tar.gz
-  - tar xf /tmp/bx.tar.gz -C /tmp
-  - sudo /tmp/Bluemix_CLI/install_bluemix_cli
-  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-  - chmod +x kubectl
-  - sudo mv kubectl /usr/local/bin
+
+install:
+  - "./scripts/install.sh"
+  - "./scripts/bx_auth.sh"
 
 before_script:
   - "./tests/test-shellcheck.sh"
   - "./tests/test-yamllint.sh"
 
-script:
-  - "./tests/test-docker-compose.sh"
+script: "$TEST_RUN"
