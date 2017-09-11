@@ -14,7 +14,7 @@ main(){
         test_failed
     elif ! docker-compose ps; then
         test_failed
-    elif ! nc -z -v localhost 30080; then
+    elif ! sleep 1 && curl -sS localhost:30080; then
         test_failed
     else
         test_passed
