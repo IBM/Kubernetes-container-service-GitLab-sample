@@ -47,7 +47,7 @@ see [Deploying Gitlab with Docker](docs/deploy-with-docker.md)
 
 Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template#container-journey-template---creating-a-kubernetes-cluster) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
-If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry) to the Bluemix Container Registry.
+If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry.md) to the Bluemix Container Registry.
 
 ### Deploy using DevOps Toolchain to Kubernetes Cluster from Bluemix Container Service
 If you want to deploy the Gitlab directly to Bluemix, click on 'Deploy to Bluemix' button below to create a [Bluemix DevOps service toolchain and pipeline](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/toolchains_about.html#toolchains_about) for deploying the Gitlab sample, else jump to [Steps](#steps)

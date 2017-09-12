@@ -12,7 +12,7 @@ of which we will install GitLab.
 
 - [LinuxONE](https://www-03.ibm.com/systems/linuxone/open-source/index.html)
 - [Docker](https://www.docker.com)
-- [Docker Store](https://sore.docker.com)
+- [Docker Store](https://store.docker.com)
 
 ## Prerequisites
 
