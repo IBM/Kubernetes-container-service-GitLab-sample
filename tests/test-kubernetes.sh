@@ -49,7 +49,7 @@ kubectl_deploy() {
 }
 
 verify_deploy(){
-    IPS=$(bx cs workers "$CLUSTER_NAME" | awk '{ print $2 }' | grep -v Public | grep .)
+    IPS=$(bx cs workers "$CLUSTER_NAME" | awk '{ print $2 }' | grep '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
     for IP in $IPS; do
         if ! curl -sS "$IP":30080; then
             test_failed
