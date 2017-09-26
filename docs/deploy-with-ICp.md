@@ -155,28 +155,31 @@ Bringing machine 'icp-master' up with 'virtualbox' provider...
 ```
 
 Use the UI URL in a web browser (without SSL to avoid complaints from the
-browser):
+browser) and you will see the dashboard.  It may take a few minutes for the
+'Applications' sectoin on the upper right to read that they are healthy.
+
+![dashboard image](../images/dashboard.png)
 
 ### 2. Import Docker images
 
 To push images to the repository, we must first create a namespace and user.
-To create a namespace:
+To create a namespace, select 'System' from the navigation menu in the upper
+left corner.
 
-    From the navigation menu, select System > Namespaces.
-    Click New Namespace.
-    Enter a namespace name (e.g. 'gitlab')
-    Click Add Namespace.
+![system page image](..images/system.png)
 
-To add a user to a namespace:
+Select the 'Namespace' header, and then click the light blue 'New Namespace'
+button on the right.  Give your new namespace a title (e.g. 'gitlab') and
+then click 'Add Namespace'.
 
-    From the navigation menu, select System > Users.
-    Click New User.
-    Enter "user1" as the user name, and provide a password.
-    Select Namespace 'gitlab'.
-    Click Add User.
+Now, to add a user to a namespace:
 
-Now we are ready to upload some images; we will start with Gitlab.  First, pull
-the Gitlab image from Docker Hub:
+Select the 'Users' header, and then click the light blue 'New User' button on
+the right.  Enter "user1" as the user name, and provide a password.  Select the
+'gitlab' namespace and then click 'Add User'.
+
+Now we are ready to upload our Gitlab image.  First, pull the Gitlab image from
+Docker Hub:
 
     docker pull gitlab-ce
 
@@ -192,15 +195,18 @@ Push the image to local image registry
 
     docker push master.cfc:8500/gitlab/gitlabce1:0.1
 
-Repeat the procedure above for postgresql and redis images.
+### 3. Deploy the Application
 
-### 3. Define service in a Compose file
+From navigation menu, select Applications, and then Deploy Applicaiton.  Then
+on the General tab, provide an application name.  On the Container Settings
+tab, provide a container name, image name, and port.
 
-In the root of this repo is a docker-compose.yml file which will demonstrate
-a multiple container deployment that you can run in your cluster:
+    Application name: icp-gitlab
 
-### 4. Run
-```text
-$ docker-compose up
-```
+    Container name: icp-gitlab
 
+    Image name: master.cfc:8500/admin/gitlabce:0.1
+
+    Container port: 80
+
+Finally, select Deploy.
