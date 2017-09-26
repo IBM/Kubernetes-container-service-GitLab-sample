@@ -1,13 +1,14 @@
 # Deploy with IBM Cloud private
 
-Another option for getting a Kubernetes cluster up and running is to install it
-on top of IBM Cloud private.
+Another option for getting a Kubernetes cluster up and running is to install
+IBM Cloud private.
 
 ## Included Components
 
 - [Vagrant](https://www.vagrantup.com)
 - [VirtualBox](https://www.virtualbox.org)
 - [IBM Cloud private](https://www.ibm.com/support/knowledgecenter/SSBS6K/product_welcome_cloud_private.html)
+
 ## Prerequisites
 
 You will need to download and run the approprate installer of
@@ -26,7 +27,6 @@ nodes = [
   {:hostname => 'icp-master', :ip => '192.168.122.10', :box => 'centos/7', :cpu => 2, :memory => 4096},
 ]
 
-# Please update the icp_config according to your laptop network
 icp_config = '
 network_type: calico
 network_cidr: 10.1.0.0/16
@@ -38,7 +38,7 @@ mesos_enabled: false
 install_docker_py: true
 '
 
-# Please update if you want to use a specified version
+# use to specify version
 icp_version = 'latest'
 
 icp_hosts = "[master]\n#{nodes.last[:ip]}\n[proxy]\n#{nodes.last[:ip]}\n[worker]\n"
@@ -154,9 +154,9 @@ Bringing machine 'icp-master' up with 'virtualbox' provider...
 ==> icp-master: Playbook run took 0 days, 0 hours, 23 minutes, 40 seconds
 ```
 
-Use the UI URL in a web browser (without SSL to avoid complaints from the
-browser) and you will see the dashboard.  It may take a few minutes for the
-'Applications' sectoin on the upper right to read that they are healthy.
+Use the UI URL in a web browser (after accepting a security exception) and you
+will see the dashboard.  It may take a few minutes for the 'Applications'
+section on the upper right to read that they are healthy.
 
 ![dashboard image](../images/dashboard.png)
 
@@ -166,7 +166,7 @@ To push images to the repository, we must first create a namespace and user.
 To create a namespace, select 'System' from the navigation menu in the upper
 left corner.
 
-![system page image](..images/system.png)
+![system page image](../images/system.png)
 
 Select the 'Namespace' header, and then click the light blue 'New Namespace'
 button on the right.  Give your new namespace a title (e.g. 'gitlab') and
