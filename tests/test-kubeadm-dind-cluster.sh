@@ -1,14 +1,7 @@
 #!/bin/bash -e
 
-test_failed(){
-    echo -e >&2 "\033[0;31mKubernetes test failed!\033[0m"
-    exit 1
-}
-
-test_passed(){
-    echo -e "\033[0;32mKubernetes test passed!\033[0m"
-    exit 0
-}
+# shellcheck disable=SC1090
+source "$(dirname "$0")"/../scripts/resources.sh
 
 setup_dind-cluster() {
     wget https://cdn.rawgit.com/Mirantis/kubeadm-dind-cluster/master/fixed/dind-cluster-v1.7.sh
@@ -26,7 +19,7 @@ kubectl_deploy() {
     while [[ $(kubectl get pods | grep -c Running) -ne 3 ]]; do
         if [[ ! "$i" -lt 24 ]]; then
             echo "Timeout waiting on pods to be ready"
-            test_failed
+            test_failed "$0"
         fi
         sleep 10
         echo "...$i * 10 seconds elapsed..."
@@ -36,20 +29,21 @@ kubectl_deploy() {
 }
 
 verify_deploy(){
+    echo "Verifying deployment was successful"
     if ! sleep 1 && curl -sS "$(kubectl get svc gitlab | grep gitlab | awk '{ print $2 }')":30080; then
-        test_failed
+        test_failed "$0"
     fi
 }
 
 main(){
     if ! setup_dind-cluster; then
-        test_failed
+        test_failed "$0"
     elif ! kubectl_deploy; then
-        test_failed
+        test_failed "$0"
     elif ! verify_deploy; then
-        test_failed
+        test_failed "$0"
     else
-        test_passed
+        test_passed "$0"
     fi
 }
 
