@@ -1,10 +1,10 @@
-# Deploy with IBM Cloud private
+# Deploy with IBM Cloud Private
 
 Another option for getting a Kubernetes cluster up and running is to install
-IBM Cloud private.
+IBM Cloud Private.
 
 Follow the directions at https://github.com/IBM/deploy-ibm-cloud-private to
-either install a local instance of IBM Cloud private via Vagrant or a remote
+either install a local instance of IBM Cloud Private via Vagrant or a remote
 instance at Softlayer.  These instructions assume the former.
 
 Log into the Vagrant VM
