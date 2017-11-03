@@ -1,0 +1,101 @@
+# Default values for kubernetes-gitlab-demo.
+# This is a YAML-formatted file.
+
+# Required variables
+
+# baseDomain is the top-most part of the domain. Subdomains will be generated
+# for gitlab, mattermost, registry, and prometheus.
+# Recommended to set up an A record on the DNS to *.your-domain.com to point to
+# the baseIP
+# e.g. *.your-domain.com.	A	300	baseIP
+#baseDomain: your-domain.com
+
+# legoEmail is a valid email address used by Let's Encrypt. It does not have to
+# be at the baseDomain.
+#legoEmail: you@example.com
+
+# Optional variables
+# baseIP is an externally provisioned static IP address to use instead of the provisioned one.
+#baseIP: 1.1.1.1
+
+# Allow override of scheme through Values
+externalScheme: https
+
+nameOverride: gitlab
+# `ce` or `ee`
+gitlab: ce
+gitlabCEImage: gitlab/gitlab-ce:10.1.0-ce.0
+gitlabEEImage: gitlab/gitlab-ee:10.1.0-ee.0
+postgresPassword: NDl1ZjNtenMxcWR6NXZnbw==
+initialSharedRunnersRegistrationToken: "tQtCbx5UZy_ByS7FyzUH"
+mattermostAppSecret: NDl1ZjNtenMxcWR6NXZnbw==
+mattermostAppUID: aadas
+redisImage: redis:3.2.10
+redisDedicatedStorage: true
+#redisStorageSize: 5Gi
+redisAccessMode: ReadWriteOnce
+postgresImage: postgres:9.6.5
+# If you disable postgresDedicatedStorage, you should consider bumping up gitlabRailsStorageSize
+postgresDedicatedStorage: true
+postgresAccessMode: ReadWriteOnce
+#postgresStorageSize: 30Gi
+gitlabDataAccessMode: ReadWriteOnce
+#gitlabDataStorageSize: 30Gi
+gitlabRegistryAccessMode: ReadWriteOnce
+#gitlabRegistryStorageSize: 30Gi
+gitlabConfigAccessMode: ReadWriteOnce
+#gitlabConfigStorageSize: 1Gi
+gitlabRunnerImage: gitlab/gitlab-runner:alpine-v10.1.0
+# Valid values for provider are `gke` for Google Container Engine. Leaving it blank (or any othervalue) will disable fast disk options.
+provider: gke
+
+## Storage Class Options
+## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+## If not defined, but provider is gke, will use SSDs
+## Otherwise default: volume.alpha.kubernetes.io/storage-class: default
+#gitlabConfigStorageClass: default
+#gitlabDataStorageClass: default
+#gitlabRegistryStorageClass: default
+#postgresStorageClass: default
+#redisStorageClass: default
+
+healthCheckToken: 'SXBAQichEJasbtDSygrD'
+# Optional, for GitLab EE images only
+#gitlabEELicense: base64-encoded-license
+
+gitlab-runner:
+  checkInterval: 1
+  # runnerRegistrationToken must equal initialSharedRunnersRegistrationToken
+  runnerRegistrationToken: "tQtCbx5UZy_ByS7FyzUH"
+  # resources:
+  #   limits:
+  #     memory: 500Mi
+  #     cpu: 600m
+  #   requests:
+  #     memory: 500Mi
+  #     cpu: 600m
+  runners:
+    privileged: true
+    ## Build Container specific configuration
+    ##
+    # builds:
+    #   cpuLimit: 200m
+    #   memoryLimit: 256Mi
+    #   cpuRequests: 100m
+    #   memoryRequests: 128Mi
+
+    ## Service Container specific configuration
+    ##
+    # services:
+    #   cpuLimit: 200m
+    #   memoryLimit: 256Mi
+    #   cpuRequests: 100m
+    #   memoryRequests: 128Mi
+
+    ## Helper Container specific configuration
+    ##
+    # helpers:
+    #   cpuLimit: 200m
+    #   memoryLimit: 256Mi
+    #   cpuRequests: 100m
+    #   memoryRequests: 128Mi
