@@ -1,0 +1,4 @@
+dependencies:
+- name: gitlab-runner
+  version: 0.1.13
+  repository: https://charts.gitlab.io/

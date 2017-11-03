@@ -1,0 +1,78 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "postgresql.fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        name: {{ template "postgresql.fullname" . }}
+    spec:
+      containers:
+      - name: postgresql
+        image: {{ .Values.postgresImage }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "fullname" . }}-config
+              key: postgres_user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}-secrets
+              key: postgres_password
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: {{ template "fullname" . }}-config
+              key: postgres_db
+        - name: DB_EXTENSION
+          value: pg_trgm
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        ports:
+        - name: postgres
+          containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: data
+          subPath: postgres
+        - mountPath: /docker-entrypoint-initdb.d
+          name: initdb
+          readOnly: true
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -h
+            - localhost
+            - -U
+            - postgres
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -h
+            - localhost
+            - -U
+            - postgres
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ if .Values.postgresDedicatedStorage }} {{ template "postgresql.fullname" . }}-storage {{ else }} {{ template "fullname" . }}-storage {{ end }}
+      - name: initdb
+        configMap:
+          name: {{ template "postgresql.fullname" . }}-initdb

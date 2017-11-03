@@ -1,0 +1,28 @@
+{{- if and (default "" .Values.baseDomain) (default "" .Values.legoEmail) }}
+  It may take several minutes for GitLab to reconfigure.
+    You can watch the status by running `kubectl get deployment -w {{ template "fullname" . }} --namespace {{ .Release.Namespace }}
+
+  {{- if .Values.baseIP }}
+  Make sure to configure DNS with something like:
+    *.{{ .Values.baseDomain }}	300 IN A {{ .Values.baseIP }}
+  {{- else }}
+  You did not specify a baseIP so one will be assigned for you.
+  It may take a few minutes for the LoadBalancer IP to be available.
+  Watch the status with: 'kubectl get svc -w --namespace nginx-ingress nginx', then:
+
+  export SERVICE_IP=$(kubectl get svc --namespace nginx-ingress nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+  Then make sure to configure DNS with something like:
+    *.{{ .Values.baseDomain }}	300 IN A $SERVICE_IP
+  {{- end }}
+{{- else }}
+####################################################################################################
+## WARNING: You did not specify an baseDomain, gitlab-runner.gitlabUrl, and legoEmail in your 'helm install' call. ##
+####################################################################################################
+
+This deployment will be incomplete until you provide these variables:
+
+$ helm upgrade {{ .Release.Name }} \
+  --set baseDomain=example.com,gitlab-runner.gitlabUrl=https://gitlab.example.com,legoEmail=you@example.com \
+  gitlab/kubernetes-gitlab-demo
+{{- end -}}

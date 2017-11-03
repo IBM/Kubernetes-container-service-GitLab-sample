@@ -1,0 +1,25 @@
+{{- if .Values.postgresDedicatedStorage }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "postgresql.fullname" . }}-storage
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+  {{- if .Values.postgresStorageClass }}
+    volume.beta.kubernetes.io/storage-class: {{ .Values.postgresStorageClass | quote }}
+  {{- else if (eq .Values.provider "gke") }}
+    volume.beta.kubernetes.io/storage-class: {{ template "fullname" . }}-fast
+  {{- else }}
+    volume.alpha.kubernetes.io/storage-class: default
+  {{- end }}
+spec:
+  accessModes:
+    - {{ default "ReadWriteOnce" .Values.postgresAccessMode | quote }}
+  resources:
+    requests:
+      storage: {{ default "30Gi" .Values.postgresStorageSize }}
+{{- end }}
