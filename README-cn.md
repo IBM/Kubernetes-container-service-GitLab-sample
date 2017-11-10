@@ -2,7 +2,7 @@
 
 # 将 GitLab 部署到 Kubernetes 集群上
 
-*阅读本文的其他语言版本：[한국어](README.ko.md)。*
+*阅读本文的其他语言版本：[English](README.md)。*
 
 本项目展示，如何将一个常见的多组件工作负载（在本例中是 GitLab）部署到 Kubernetes 集群上。GitLab 因其基于 Git 的代码跟踪工具而流行。GitLab 代表着一种典型的多层应用程序，每个组件都拥有自己的容器。微服务容器将用于 Web 层，状态/作业数据库使用 Redis 和 PostgreSQL 作为数据库。
 
