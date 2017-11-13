@@ -2,7 +2,7 @@
 
 # GitLab deployment on Kubernetes Cluster
 
-*Read this in other languages: [한국어](README.ko.md).*
+*Read this in other languages: [한국어](README.ko.md)、[中国](README-cn.md).*
 
 This project shows how a common multi-component workload, in this case GitLab, can be deployed on Kubernetes Cluster. GitLab is famous for its Git-based and code-tracking tool. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
 
