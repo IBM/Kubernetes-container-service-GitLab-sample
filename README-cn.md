@@ -59,10 +59,15 @@
 #### 步骤
 
 1.[使用 Kubernetes 创建服务和部署](#1-use-kubernetes-to-create-services-and-deployments-for-gitlab-redis-and-postgresql)
+
   - 1.1 [在容器中使用 PostgreSQL](#11-use-postgresql-in-container) 或
+  
   - 1.2 [使用来自 Bluemix 的 PostgreSQL](#12-use-postgresql-from-bluemix)
+  
 2.[获取用于 GitLab 的外部 IP 和端口](#2-retrieve-external-ip-and-port-for-gitlab)
+
 3.[GitLab 已准备就绪！使用 GitLab 托管您的存储库](#3-gitlab-is-ready-use-gitlab-to-host-your-repositories)
+
 
 #### 1.使用 Kubernetes 为 GitLab、Redis 和 PostgreSQL 创建服务并执行部署
 
