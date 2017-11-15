@@ -1,6 +1,7 @@
 ---
 language: python
 python: 2.7
+cache: pip
 sudo: required
 
 services:
@@ -22,7 +23,7 @@ env:
   - TEST_RUN="./tests/test-kubernetes.sh"
 
 before_install:
-  - pip install yamllint
+  - pip install -U -r test-requirements.txt
 
 install:
   - "./scripts/install.sh"

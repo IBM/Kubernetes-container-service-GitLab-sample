@@ -1,21 +1,15 @@
 #!/bin/bash
 
+# This script is intended to be run by Travis CI. If running elsewhere, invoke
+# it with: TRAVIS_PULL_REQUEST=false [path to script]
+
+# shellcheck disable=SC1090
+source "$(dirname "$0")"/../scripts/resources.sh
+
 kubeclt_clean() {
     echo "Cleaning cluster"
     kubectl delete pv local-volume-1 local-volume-2 local-volume-3
     kubectl delete deployment,service,pvc,replicaset -l app=gitlab
-}
-
-test_failed(){
-    kubeclt_clean
-    echo -e >&2 "\033[0;31mKubernetes test failed!\033[0m"
-    exit 1
-}
-
-test_passed(){
-    kubeclt_clean
-    echo -e "\033[0;32mKubernetes test passed!\033[0m"
-    exit 0
 }
 
 kubectl_config() {
@@ -36,7 +30,7 @@ kubectl_deploy() {
     while [[ $(kubectl get pods | grep -c Running) -ne 3 ]]; do
         if [[ ! "$i" -lt 24 ]]; then
             echo "Timeout waiting on pods to be ready"
-            test_failed
+            test_failed "$0"
         fi
         sleep 10
         echo "...$i * 10 seconds elapsed..."
@@ -49,31 +43,29 @@ kubectl_deploy() {
 }
 
 verify_deploy(){
+    echo "Verifying deployment was successful"
     IPS=$(bx cs workers "$CLUSTER_NAME" | awk '{ print $2 }' | grep '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
     for IP in $IPS; do
         if ! curl -sS "$IP":30080; then
-            test_failed
+            test_failed "$0"
         fi
         echo
     done
 }
 
 main(){
-    if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
-        echo -e "\033[0;33mPull Request detected; not running Kubernetes test.\033[0m"
-        exit 0
-    fi
+    is_pull_request "$0"
 
     if ! kubectl_config; then
         echo "Config failed."
-        test_failed
+        test_failed "$0"
     elif ! kubectl_deploy; then
         echo "Deploy failed"
-        test_failed
+        test_failed "$0"
     elif ! verify_deploy; then
-        test_failed
+        test_failed "$0"
     else
-        test_passed
+        test_passed "$0"
     fi
 }
 

@@ -1,9 +1,12 @@
-#!/bin/bash
+#!/bin/bash -e
 
-if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
-    echo -e "\033[0;33mPull Request detected; not installing extra software.\033[0m"
-    exit 0
-fi
+# This script is intended to be run by Travis CI. If running elsewhere, invoke
+# it with: TRAVIS_PULL_REQUEST=false [path to script]
+
+# shellcheck disable=SC1090
+source "$(dirname "$0")"/../scripts/resources.sh
+
+is_pull_request "$0"
 
 echo "Install Bluemix CLI"
 curl -L https://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz > Bluemix_CLI.tar.gz
