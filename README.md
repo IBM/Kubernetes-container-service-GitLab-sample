@@ -45,6 +45,8 @@ see [Deploying Gitlab with Docker](docs/deploy-with-docker.md)
 
 ### Deploy to Kubernetes
 
+Use [Deploying Gitlab to IBM Cloud Private](docs/deploy-with-ICp.md) if you wish to install this on IBM Cloud Private, otherwise follow the instructions below.
+
 Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template#container-journey-template---creating-a-kubernetes-cluster) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry.md) to the Bluemix Container Registry.
