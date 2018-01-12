@@ -49,7 +49,7 @@ spec:
               name: redis
           volumeMounts:
             - name: redis
-              mountPath: /var/lib/redis:rw
+              mountPath: /data:rw
       volumes:
         - name: redis
           persistentVolumeClaim:
