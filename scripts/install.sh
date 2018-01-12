@@ -9,7 +9,7 @@ source "$(dirname "$0")"/../scripts/resources.sh
 is_pull_request "$0"
 
 echo "Install Bluemix CLI"
-curl -L https://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz > Bluemix_CLI.tar.gz
+curl -L https://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/IBM_Cloud_CLI_amd64.tar.gz > Bluemix_CLI.tar.gz
 tar -xvf Bluemix_CLI.tar.gz
 sudo ./Bluemix_CLI/install_bluemix_cli
 
