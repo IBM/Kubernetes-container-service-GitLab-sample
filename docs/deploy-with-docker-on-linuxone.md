@@ -17,8 +17,8 @@ of which we will install GitLab.
 ## Prerequisites
 
 Register at [LinuxONE Communinity Cloud](https://developer.ibm.com/linuxone/) for a trial account.
-We will be using a Ret Hat base image for this journey, so be sure to chose the
-'Request your trial' button on the left side of this page.
+We will be using a Red Hat base image for this journey, so be sure to chose the
+`Request your trial` button on the left side of this page.
 
 ## Steps
 
