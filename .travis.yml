@@ -6,6 +6,13 @@ sudo: required
 
 dist: trusty
 
+notifications:
+  slack:
+    rooms:
+      - "$SLACK_ROOM"
+    on_pull_requests: false
+    on_success: change
+
 services:
   - docker
 
