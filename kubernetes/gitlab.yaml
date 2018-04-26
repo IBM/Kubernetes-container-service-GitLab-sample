@@ -79,24 +79,3 @@ spec:
         - name: gitlab
           persistentVolumeClaim:
             claimName: gitlab-claim
----
-apiVersion: batch/v1
-kind: Job
-metadata: {name: kubernetes-containter-service-gitlab-sample-metrics}
-spec:
-  template:
-    metadata: {name: kubernetes-container-service-gitlab-sample-metrics}
-    spec:
-      containers:
-        - env:
-            - {name: config, value: '{"event_id": "web",
-                "repository_id": "Kubernetes-container-service-Gitlab-sample",
-                "target_services": ["Compose for PostgreSQL"],
-                "target_runtimes": ["Kubernetes Cluster"],
-                "event_organizer": "dev-journeys"}'}
-            - {name: language, value: ''}
-          image: journeycode/kubernetes:latest
-          name: kubernetes-container-service-gitlab-sample-metrics
-          resources:
-            limits: {cpu: 100m}
-      restartPolicy: Never
