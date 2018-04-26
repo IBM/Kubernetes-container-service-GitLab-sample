@@ -74,7 +74,7 @@ spec:
               name: gitlab
           volumeMounts:
             - name: gitlab
-              mountPath: /home/git/data:rw
+              mountPath: /home/git/data
       volumes:
         - name: gitlab
           persistentVolumeClaim:
