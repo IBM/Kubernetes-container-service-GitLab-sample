@@ -52,7 +52,7 @@ Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/ge
 If you want to use the Bluemix Container Registry start by [Uploading the images](docs/use-bluemix-container-registry.md) to the Bluemix Container Registry.
 
 ### Deploy using DevOps Toolchain to Kubernetes Cluster from Bluemix Container Service
-If you want to deploy the Gitlab directly to Bluemix, click on 'Deploy to Bluemix' button below to create a [Bluemix DevOps service toolchain and pipeline](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/toolchains_about.html#toolchains_about) for deploying the Gitlab sample, else jump to [Steps](#steps)
+If you want to deploy the Gitlab directly to Bluemix, click on `Deploy to Bluemix` button below to create a [Bluemix DevOps service toolchain and pipeline](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/toolchains_about.html#toolchains_about) for deploying the Gitlab sample, else jump to [Steps](#steps)
 
 [![Create Toolchain](https://github.com/IBM/container-journey-template/blob/master/images/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)
 
@@ -89,7 +89,7 @@ $ kubectl create -f kubernetes/redis.yaml
 $ kubectl create -f kubernetes/gitlab.yaml
 ```
 
-After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run 'kubectl proxy' and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
+After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run `kubectl proxy` and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
 
 ![Kubernetes Status Page](images/kube_ui.png)
 
@@ -97,7 +97,7 @@ Next [retrieve your external ip and port for GitLab](#2-retrieve-external-ip-and
 
 ##### 1.2 Use PostgreSQL from Bluemix
 
-Use the Bluemix catalog or the bx command to create a service instance of Compose for PostgreSQL and add a set of credentials.
+Use the Bluemix catalog or the `bx` command to create a service instance of Compose for PostgreSQL and add a set of credentials.
 
 ```bash
 $ bx service create compose-for-postgresql Standard "Compose for PostgreSQL-GL"
@@ -112,7 +112,7 @@ $ bx service key-show "Compose for PostgreSQL-GL" "Credentials-1" | grep "postgr
 
 ![Postgres Connection String example](images/pg_credentials.png)
 
-Modify your ```kubernetes/gitlab-postgres-svc.yaml``` file and replace COMPOSE_PG_PASSWORD with the password, COMPOSE_PG_HOST with the hostname, and COMPOSE_PG_PORT with the port. 
+Modify your ```kubernetes/gitlab-postgres-svc.yaml``` file and replace `COMPOSE_PG_PASSWORD` with the password, `COMPOSE_PG_HOST` with the hostname, and `COMPOSE_PG_PORT` with the port. 
 
 Using the above example, the ```env:``` section will look like this.
 
@@ -145,7 +145,7 @@ $ kubectl create -f kubernetes/redis.yaml
 $ kubectl create -f kubernetes/gitlab-postgres-svc.yaml
 ```
 
-After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run 'kubectl proxy' and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
+After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run `kubectl proxy` and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
 
 ![Kubernetes Status Page](images/kube_ui_gr.png)
 
@@ -163,9 +163,9 @@ NAME      CLUSTER-IP     EXTERNAL-IP   PORT(S)                     AGE
 gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 ```
 
-> Note: The 30080 port is for gitlab UI and the 30022 port is for ssh.
+> Note: The `30080` port is for gitlab UI and the `30022` port is for ssh.
 
-> Note: The gitlab external url is set to `gitlab.example.com` add this to your hosts file pointing to your IP address from above in order to use the url that gitlab expects. If you can't do this, then using the IP (in this example 169.47.241.22) should work.
+> Note: The gitlab external url is set to `gitlab.example.com` add this to your hosts file pointing to your IP address from above in order to use the url that gitlab expects. If you can't do this, then using the IP (in this example `169.47.241.22`) should work.
 
 > Note: If you using Minikube for local kubernetes deployment, you can access the list of service IPs using the `minikube service list` command.
 
@@ -203,23 +203,6 @@ To delete your PostgreSQL credentials and remove the service instance from Bluem
 bx service key-delete "Compose for PostgreSQL-GL" Credentials-1
 bx service delete "Compose for PostgreSQL-GL"
 ```
-
-# Privacy Notice
-
-Sample Kubernetes Yaml file that includes this package may be configured to track deployments to [IBM Cloud](https://www.bluemix.net/) and other Kubernetes platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM/metrics-collector-service) service on each deployment:
-
-* Kubernetes Cluster Provider(`IBM Cloud,Minikube,etc`)
-* Kubernetes Machine ID
-* Kubernetes Cluster ID (Only from IBM Cloud's cluster)
-* Kubernetes Customer ID (Only from IBM Cloud's cluster)
-* Environment variables in this Kubernetes Job.
-
-This data is collected from the Kubernetes Job in the sample application's yaml file. This data is used by IBM to track metrics around deployments of sample applications to IBM Cloud to measure the usefulness of our examples so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
-
-## Disabling Deployment Tracking
-
-Please comment out/remove the Metric Kubernetes Job portion in the 'kubernetes/github.yaml' file.
-
 
 # License
 [Apache 2.0](LICENSE)

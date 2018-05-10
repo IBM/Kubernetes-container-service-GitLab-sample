@@ -4,9 +4,9 @@
 source "$(dirname "$0")"/../scripts/resources.sh
 
 setup_dind-cluster() {
-    wget https://cdn.rawgit.com/Mirantis/kubeadm-dind-cluster/master/fixed/dind-cluster-v1.7.sh
-    chmod 0755 dind-cluster-v1.7.sh
-    ./dind-cluster-v1.7.sh up
+    wget https://cdn.rawgit.com/Mirantis/kubeadm-dind-cluster/master/fixed/dind-cluster-v1.8.sh
+    chmod 0755 dind-cluster-v1.8.sh
+    ./dind-cluster-v1.8.sh up
     export PATH="$HOME/.kubeadm-dind-cluster:$PATH"
 }
 
@@ -19,6 +19,7 @@ kubectl_deploy() {
     while [[ $(kubectl get pods | grep -c Running) -ne 3 ]]; do
         if [[ ! "$i" -lt 24 ]]; then
             echo "Timeout waiting on pods to be ready"
+            kubectl get pods -a
             test_failed "$0"
         fi
         sleep 10

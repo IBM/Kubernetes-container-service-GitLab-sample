@@ -9,7 +9,7 @@ source "$(dirname "$0")"/../scripts/resources.sh
 is_pull_request "$0"
 
 echo "Install Bluemix CLI"
-curl -L https://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz > Bluemix_CLI.tar.gz
+curl -L https://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/IBM_Cloud_CLI_amd64.tar.gz > Bluemix_CLI.tar.gz
 tar -xvf Bluemix_CLI.tar.gz
 sudo ./Bluemix_CLI/install_bluemix_cli
 
@@ -18,6 +18,10 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s ht
 chmod 0755 kubectl
 sudo mv kubectl /usr/local/bin
 
+echo "Configuring bx to disable version check"
+bx config --check-version=false
+echo "Checking bx version"
+bx --version
 echo "Install the Bluemix container-service plugin"
 bx plugin install container-service -r Bluemix
 

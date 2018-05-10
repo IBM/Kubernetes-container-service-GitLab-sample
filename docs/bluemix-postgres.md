@@ -40,7 +40,7 @@ bx cr images
 
 # 2. Create Compose for PostgreSQL on Bluemix
 
-Use the Bluemix catalog or the bx command to create a service instance of Compose for PostgreSQL and add a set of credentials.
+Use the Bluemix catalog or the `bx` command to create a service instance of Compose for PostgreSQL and add a set of credentials.
 
 ```bash
 bx service create compose-for-postgresql Standard "Compose for PostgreSQL-GL"
@@ -87,9 +87,9 @@ kubectl create -f redis.yaml
 kubectl create -f gitlab-postgres-svc.yaml
 ```
 
-After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run 'kubectl proxy' and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
+After you have created all the services and deployments, wait for 3 to 5 minutes. You can check the status of your deployment on Kubernetes UI. Run `kubectl proxy` and go to URL 'http://127.0.0.1:8001/ui' to check when the GitLab container becomes ready.
 
-![Kubernetes Status Page](images/kube_ui_gr.png)
+![Kubernetes Status Page](/images/kube_ui_gr.png)
 
 After few minutes run the following commands to get your public IP and NodePort number.
 
@@ -102,22 +102,22 @@ NAME      CLUSTER-IP     EXTERNAL-IP   PORT(S)                     AGE
 gitlab    10.10.10.148   <nodes>       80:30080/TCP,22:30022/TCP   2s
 ```
 
-> Note: The 30080 port is for gitlab UI and the 30022 port is for ssh.
+> Note: The `30080` port is for gitlab UI and the `30022` port is for ssh.
 
 Congratulation. Now you can use the link **http://[IP]:30080** to access your gitlab site on browser.
 
-> Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is 169.47.241.106 and the UI port number is 30080.
+> Note: For the above example, the link would be http://169.47.241.106:30080  since its IP is `169.47.241.106` and the UI port number is `30080`.
 
 
 # 5. Using GitLab
 Now that Gitlab is running you can register as a new user and create a project.
 
-![Registration page](images/register.png)
+![Registration page](/images/register.png)
 
 
 After logging in as your newly-created user you can create a new project.
 
-![Create project](images/new_project.png)
+![Create project](/images/new_project.png)
 
 Once a project has been created you'll be asked to add an SSH key for your user.
 
@@ -147,7 +147,7 @@ git push origin master
 ```
 
 You can now see it in the Gitlab UI.
-![Repo](images/first_commit.png)
+![Repo](/images/first_commit.png)
 
 If you want to use http URLs for cloning and pushing to a public repository on GitLab, that`s enabled as well.
 
