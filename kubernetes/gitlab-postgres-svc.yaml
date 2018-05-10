@@ -77,7 +77,11 @@ spec:
               name: gitlab
           volumeMounts:
             - name: gitlab
-              mountPath: /home/git/data:rw
+              mountPath: /var/opt/gitlab
+              subPath: gitlab_data
+            - name: gitlab
+              mountPath: /etc/gitlab
+              subPath: gitlab_configuration
       volumes:
         - name: gitlab
           persistentVolumeClaim:
