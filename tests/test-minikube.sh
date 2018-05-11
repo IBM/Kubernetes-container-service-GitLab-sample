@@ -3,11 +3,13 @@
 # shellcheck disable=SC1090
 source "$(dirname "$0")"/../scripts/resources.sh
 
-setup_dind-cluster() {
-    wget https://cdn.rawgit.com/Mirantis/kubeadm-dind-cluster/master/fixed/dind-cluster-v1.8.sh
-    chmod 0755 dind-cluster-v1.8.sh
-    ./dind-cluster-v1.8.sh up
-    export PATH="$HOME/.kubeadm-dind-cluster:$PATH"
+setup_minikube() {
+  export CHANGE_MINIKUBE_NONE_USER=true
+  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+  curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+  sudo -E minikube start --vm-driver=none --kubernetes-version=v1.9.0
+  minikube update-context
+  JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 }
 
 kubectl_deploy() {
@@ -37,7 +39,7 @@ verify_deploy(){
 }
 
 main(){
-    if ! setup_dind-cluster; then
+    if ! setup_minikube; then
         test_failed "$0"
     elif ! kubectl_deploy; then
         test_failed "$0"
