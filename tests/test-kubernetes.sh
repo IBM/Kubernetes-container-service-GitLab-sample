@@ -8,8 +8,9 @@ source "$(dirname "$0")"/../scripts/resources.sh
 
 kubeclt_clean() {
     echo "Cleaning cluster"
+    kubectl delete pvc,deployment,service,replicaset -l app=gitlab
+    sleep 30s
     kubectl delete pv local-volume-1 local-volume-2 local-volume-3
-    kubectl delete deployment,service,pvc,replicaset -l app=gitlab
 }
 
 kubectl_config() {
