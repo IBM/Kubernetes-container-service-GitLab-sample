@@ -25,8 +25,8 @@
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [Kubernetes Clusters](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov)
-- [Bluemix Container Service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
-- [Bluemix Compose for PostgreSQL](https://console.ng.bluemix.net/catalog/services/compose-for-postgresql)
+- [IBM Cloud Container Service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
+- [IBM Cloud Compose for PostgreSQL](https://console.ng.bluemix.net/catalog/services/compose-for-postgresql)
 
 ## 目标
 这个场景提供以下任务的操作说明和经验：
@@ -34,7 +34,7 @@
 - 构建容器并将它们存储在容器注册表中
 - 使用 Kubernetes 创建本地持久卷来定义持久磁盘
 - 使用 Kubernetes pod 和服务部署容器
-- 在 Kubernetes 应用程序中使用 Bluemix 服务
+- 在 Kubernetes 应用程序中使用 IBM Cloud 服务
 - 将一个分布式 GitLab 部署到 Kubernetes 上
 
 ## 部署场景
@@ -45,12 +45,14 @@
 
 ### 部署到 Kubernetes
 
-使用 [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) 创建一个 Kubernetes 集群用于测试，或者使用 [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template#container-journey-template---creating-a-kubernetes-cluster) 创建一个 Kubernetes 集群以部署到云中。这里的代码会定期使用 Travis 针对[来自 Bluemix Container Service 的 Kubernetes 集群](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) 进行测试。
+如果希望将此 Gitlab 安装在 IBM Cloud Private 上，使用 [Deploying Gitlab to IBM Cloud Private](docs/deploy-with-ICP.md) ，否则按照以下说明执行。
 
-如果想使用 Bluemix Container Registry，首先需要[将映像上传](docs/use-bluemix-container-registry) 到 Bluemix Container Registry。
+使用 [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) 创建一个 Kubernetes 集群用于测试，或者使用 [IBM Cloud Container Service](https://github.com/IBM/container-journey-template#container-journey-template---creating-a-kubernetes-cluster) 创建一个 Kubernetes 集群以部署到云中。这里的代码会定期使用 Travis 针对[来自 IBM Cloud Container Service 的 Kubernetes 集群](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) 进行测试。
 
-### 使用 DevOps Toolchain 从 Bluemix Container Service 部署到 Kubernetes 集群
-如果想将 Gitlab 直接部署到 Bluemix，可单击下面的 Deploy to Bluemix 按钮，创建一个 [Bluemix DevOps 服务工具链和管道](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/toolchains_about.html#toolchains_about) 来部署 Gitlab 示例，否则可跳到[步骤](#steps)
+如果想使用 IBM Cloud Container Registry，首先需要[将映像上传](docs/use-bluemix-container-registry) 到 IBM Cloud Container Registry。
+
+### 使用 DevOps Toolchain 从 IBM Cloud Container Service 部署到 Kubernetes 集群
+如果想将 Gitlab 直接部署到 IBM Cloud，可单击下面的 Deploy to IBM Cloud 按钮，创建一个 [IBM Cloud DevOps 服务工具链和管道](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/toolchains_about.html#toolchains_about) 来部署 Gitlab 示例，否则可跳到[步骤](#steps)
 
 [![创建工具链](https://github.com/IBM/container-journey-template/blob/master/images/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)
 
@@ -62,7 +64,7 @@
 
   - 1.1 [在容器中使用 PostgreSQL](#11-use-postgresql-in-container) 或
   
-  - 1.2 [使用来自 Bluemix 的 PostgreSQL](#12-use-postgresql-from-bluemix)
+  - 1.2 [使用来自 IBM Cloud 的 PostgreSQL](#12-use-postgresql-from-bluemix)
   
 2.[获取用于 GitLab 的外部 IP 和端口](#2-retrieve-external-ip-and-port-for-gitlab)
 
@@ -79,7 +81,7 @@ NAME             STATUS    AGE       VERSION
 x.x.x.x          Ready     17h       v1.5.3-2+be7137fd3ad68f
 ```
 
-> 备注：如果这一步失败，请参阅 [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) 或 [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_troubleshoot.html#cs_troubleshoot) 上的故障排除文档。
+> 备注：如果这一步失败，请参阅 [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) 或 [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/cs_troubleshoot.html#cs_troubleshoot) 上的故障排除文档。
 
 ##### 1.1 在容器中使用 PostgreSQL
 
@@ -98,16 +100,16 @@ $ kubectl create -f kubernetes/gitlab.yaml
 
 接下来[获取用于 GitLab 的外部 IP 和端口](#2-retrieve-external-ip-and-port-for-GitLab)
 
-##### 1.2 使用来自 Bluemix 的 PostgreSQL
+##### 1.2 使用来自 IBM Cloud 的 PostgreSQL
 
-使用 Bluemix 目录或 bx 命令创建 Compose for PostgreSQL 的一个服务实例，并添加一组凭证。
+使用 IBM Cloud 目录或 bx 命令创建 Compose for PostgreSQL 的一个服务实例，并添加一组凭证。
 
 ```bash
 $ bx service create compose-for-postgresql Standard "Compose for PostgreSQL-GL"
 $ bx service key-create "Compose for PostgreSQL-GL" Credentials-1
 ```
 
-从 Bluemix 上的该服务的凭证对象获取连接字符串。
+从 IBM Cloud 上的该服务的凭证对象获取连接字符串。
 
 ```bash
 $ bx service key-show "Compose for PostgreSQL-GL" "Credentials-1" | grep "postgres:"
@@ -200,7 +202,7 @@ kubectl delete deployment,service,pvc -l app=gitlab
 kubectl delete pv local-volume-1 local-volume-2 local-volume-3
 ```
 
-要删除您的 PostgreSQL 凭证并从 Bluemix 删除服务实例，可运行
+要删除您的 PostgreSQL 凭证并从 IBM Cloud 删除服务实例，可运行
 
 ```bash
 bx service key-delete "Compose for PostgreSQL-GL" Credentials-1
