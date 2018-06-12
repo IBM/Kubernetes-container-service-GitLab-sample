@@ -31,6 +31,7 @@ kubectl_deploy() {
     while [[ $(kubectl get pods -l app=gitlab | grep -c Running) -ne 3 ]]; do
         if [[ ! "$i" -lt 24 ]]; then
             echo "Timeout waiting on pods to be ready"
+            kubectl get pods -a
             test_failed "$0"
         fi
         sleep 10
