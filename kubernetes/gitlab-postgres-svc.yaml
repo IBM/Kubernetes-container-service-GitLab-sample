@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gitlab
+  namespace: gitlab
   labels:
     app: gitlab
 spec:
@@ -51,7 +52,7 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: gitlab/gitlab-ce:9.1.0-ce.0
+        - image: gitlab/gitlab-ce
           name: gitlab
           env:
             - name: GITLAB_OMNIBUS_CONFIG
