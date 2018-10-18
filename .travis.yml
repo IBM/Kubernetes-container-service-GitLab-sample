@@ -7,6 +7,7 @@ sudo: required
 dist: trusty
 
 notifications:
+  webhooks: https://openwhisk.ng.bluemix.net/api/v1/namespaces/Developer%20Advocacy_Cloud%20Developer%20Advocacy/actions/travisreporting-olaph/processbuild
   slack:
     rooms:
       - "$SLACK_ROOM"
