@@ -1,0 +1,41 @@
+---
+global:
+  hosts:
+    domain: <INGRESS_SUBDOMAIN>
+    externalIP: <ALB_IP>
+  ingress:
+    configureCertmanager: false
+    tls:
+      secretName: <INGRESS_SECRET>
+    class: ""
+    annotations:
+      ingress.bluemix.net/client-max-body-size: size=0
+  edition: ce
+
+gitlab:
+  gitaly:
+    persistence:
+      enabled: false
+
+postgresql:
+  persistence:
+    enabled: false
+  metrics:
+    enabled: false
+
+minio:
+  persistence:
+    enabled: false
+
+redis:
+  persistence:
+    enabled: false
+
+certmanager:
+  install: false
+
+nginx-ingress:
+  enabled: false
+
+prometheus:
+  install: false
