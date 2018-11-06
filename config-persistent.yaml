@@ -1,0 +1,56 @@
+---
+# note: this is using a forked repo of
+# the gitlab chart for minio security context
+# https://gitlab.com/AnthonyAmanse/gitlab
+global:
+  hosts:
+    domain: <INGRESS_SUBDOMAIN>
+    externalIP: <ALB_IP>
+  ingress:
+    configureCertmanager: false
+    tls:
+      secretName: <INGRESS_SECRET>
+    class: ""
+    annotations:
+      ingress.bluemix.net/client-max-body-size: size=0
+  edition: ce
+
+gitlab:
+  gitaly:
+    persistence:
+      size: 20Gi
+      storageClass: ibmc-file-gold
+    securityContext:
+      runAsUser: 0
+
+postgresql:
+  persistence:
+    size: 20Gi
+    storageClass: ibmc-file-gold
+  securityContext:
+    runAsUser: 0
+  metrics:
+    enabled: false
+
+minio:
+  persistence:
+    size: 20Gi
+    storageClass: ibmc-file-gold
+  securityContext:
+    runAsUser: 0
+
+redis:
+  persistence:
+    size: 20Gi
+    storageClass: ibmc-file-gold
+  securityContext:
+    runAsUser: 0
+
+certmanager:
+  install: false
+
+nginx-ingress:
+  enabled: false
+
+prometheus:
+  install: false
