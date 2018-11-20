@@ -6,7 +6,7 @@
 
 This project shows how a common multi-component workload, in this case GitLab, can be deployed on Kubernetes Cluster. GitLab is famous for its Git-based and code-tracking tool. GitLab represents a typical multi-tier app and each component will have their own container(s). The microservice containers will be for the web tier, the state/job database with Redis and PostgreSQL as the database.
 
-By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, and more), you can deploy it to Kubernetes. This example is also deployable using Compose for PostgreSQL in Bluemix as the database.
+By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, and more), you can deploy it to Kubernetes. This example is also deployable using [Databases for PostgreSQL in IBM Cloud as the database](docs/bluemix-postgres.md).
 
 ![Flow](images/gitlab_container_2.png)
 
@@ -83,13 +83,13 @@ Client: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a
 Server: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
 ```
 
-> For more info in installing helm, you can find the official documentation [here](https://docs.helm.sh/using_helm/#installing-helm).
+> For more info in installing helm, you can find the official documentation [here](https://docs.helm.sh/using_helm/#installing-helm). The helm version that you install should be the same version or a previous version to the version of the cluster (i.e. the Server version in `helm version`). If the helm version is newer than the cluster, the command may not work as expected. 
 
 ### 4. Configure GitLab and Install
 
 You can find the official helm chart repo for Cloud Native GitLab deployment [here](https://gitlab.com/charts/gitlab). This can guide you in configuring your own deployment for production use.
 
-A sample configuration `config.yaml` in this repo can helm you get started with GitLab in IKS. This yaml file is configured to use the provided ingress controller with IKS. The components (Gitaly, Postgres, Redis, Minio) will not use any persistent storage for now.
+A sample configuration `config.yaml` in this repo can help you get started with GitLab in IKS. This yaml file is configured to use the provided ingress controller with IKS. The components (Gitaly, Postgres, Redis, Minio) will not use any persistent storage for now.
 
 Modify `config.yaml` file to use your own Ingress Subdomain, certificate, and IP.
 
