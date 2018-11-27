@@ -2,7 +2,7 @@
 
 ## 1. Install Docker CLI 
 
-First, install [Docker](https://www.docker.com) by following the instructions [here](https://www.docker.com/community-edition#/download) for your preferrerd operating system.
+First, install [Docker](https://www.docker.com) by following the instructions [here](https://www.docker.com/community-edition#/download) for your preferred operating system.
 
 ## Single Container deployment via Docker
 
