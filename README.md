@@ -25,14 +25,14 @@ By using different GitLab components (NGINX, Ruby on Rails, Redis, PostgreSQL, a
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [Minio](https://github.com/minio/minio)
-- [Kubernetes Clusters](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov)
-- [IBM Cloud Kubernetes Service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
+- [Kubernetes Clusters](https://cloud.ibm.com/docs/containers/cs_ov.html#cs_ov)
+- [IBM Cloud Kubernetes Service](https://cloud.ibm.com/catalog?taxonomyNavigation=apps&category=containers)
 
 # Prerequisites
 
 <!-- Use [Deploying Gitlab to IBM Cloud Private](docs/deploy-with-ICP.md) if you wish to install this on IBM Cloud Private, otherwise follow the instructions below. -->
 
-Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Cloud Kubernetes Service](https://console.bluemix.net/docs/containers/cs_tutorials.html#cs_cluster_tutorial) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from IBM Cloud Kubernetes Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
+Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/setup/minikube/) for local testing, or with [IBM Cloud Kubernetes Service](https://cloud.ibm.com/docs/containers/cs_tutorials.html#cs_cluster_tutorial) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from IBM Cloud Kubernetes Service](https://cloud.ibm.com/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 [Helm](https://helm.sh/) to install GitLab's Cloud Native charts.
 
@@ -55,7 +55,7 @@ $ git clone https://github.com/IBM/Kubernetes-container-service-GitLab-sample/
 
 Create an IBM Cloud Kubernetes Service if you don't already have one:
 
-* [IBM Cloud Kubernetes Service](https://console.bluemix.net/containers-kubernetes/catalog/cluster)
+* [IBM Cloud Kubernetes Service](https://cloud.ibm.com/containers-kubernetes/catalog/cluster)
 
 ### 3. Install Helm
 
@@ -83,7 +83,7 @@ Client: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a
 Server: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
 ```
 
-> For more info in installing helm, you can find the official documentation [here](https://docs.helm.sh/using_helm/#installing-helm). The helm version that you install should be the same version or a previous version to the version of the cluster (i.e. the Server version in `helm version`). If the helm version is newer than the cluster, the command may not work as expected. 
+> For more info in installing helm, you can find the official documentation [here](https://docs.helm.sh/using_helm/#installing-helm). The helm version that you install should be the same version or a previous version to the version of the cluster (i.e. the Server version in `helm version`). If the helm version is newer than the cluster, the command may not work as expected.
 
 ### 4. Configure GitLab and Install
 
@@ -175,6 +175,6 @@ $ helm delete gitlab --purge
 
 This code pattern is licensed under the Apache Software License, Version 2. Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. Contributions are subject to the Developer [Certificate of Origin, Version 1.1](https://developercertificate.org/) (“DCO”) and the [Apache Software License, Version 2](LICENSE).
 
-ASL FAQ link: http://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN
+ASL FAQ link: https://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN
 
 
