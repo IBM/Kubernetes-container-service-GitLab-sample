@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # shellcheck disable=SC1090
-source "$(dirname "$0")"/../scripts/resources.sh
+source "$(dirname "$0")"/../pattern-ci/scripts/resources.sh
 
 main(){
     if ! docker-compose up -d; then

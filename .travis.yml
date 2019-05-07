@@ -17,21 +17,21 @@ services:
 matrix:
   fast_finish: true
 
-env:
-  - TEST_RUN="./tests/test-docker-compose.sh"
-  - TEST_RUN="./tests/test-minikube.sh"
-  - TEST_RUN="./tests/test-kubernetes.sh"
-
 before_install:
   - sudo apt-get install shellcheck
-  - pip install -U -r test-requirements.txt
-
-install:
-  - "./scripts/install.sh"
-  - "./scripts/bx_auth.sh"
+  - sudo pip install yamllint
+  - git clone https://github.com/IBM/pattern-ci
 
 before_script:
-  - "./tests/test-shellcheck.sh"
-  - "./tests/test-yamllint.sh"
+  - "./pattern-ci/tests/shellcheck-lint.sh"
+  - "./pattern-ci/tests/yaml-lint.sh"
 
-script: "$TEST_RUN"
+jobs:
+  include:
+    - script: ./tests/test-docker-compose.sh
+    - install: ./pattern-ci/scripts/install-minikube.sh
+      script: ./tests/test-minikube.sh
+    - install:
+        - ./pattern-ci/scripts/install-ibmcloud.sh
+        - ./pattern-ci/scripts/bx-auth.sh
+      script: ./tests/test-kubernetes.sh
