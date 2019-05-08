@@ -4,7 +4,7 @@
 # it with: TRAVIS_PULL_REQUEST=false [path to script]
 
 # shellcheck disable=SC1090
-source "$(dirname "$0")"/../scripts/resources.sh
+source "$(dirname "$0")"/../pattern-ci/scripts/resources.sh
 
 kubeclt_clean() {
     echo "Cleaning cluster"
