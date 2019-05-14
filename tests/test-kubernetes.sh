@@ -41,7 +41,7 @@ kubectl_deploy() {
     echo "All pods are running"
 
     echo "Waiting for service to be available"
-    sleep 120
+    sleep 240
 }
 
 verify_deploy(){
